@@ -1,5 +1,5 @@
 import cloudinary from "../Utils/Cloudinary.js";
-import User from "../Model/User.js";
+import User from "../Models/User.js";
 
 export const uploadFile = (req, res, next) => {
   if (!req.file) {
@@ -27,7 +27,7 @@ export const uploadFile = (req, res, next) => {
 
         return res.status(201).json({
           success: true,
-          message: "Profile updated successfully",
+          message: "Profile created successfully",
           user: updatedUser,
         });
       } catch (err) {

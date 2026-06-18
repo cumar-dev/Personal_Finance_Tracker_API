@@ -78,6 +78,6 @@ export const logIn = async (req, res, next) => {
 export const logOut = (req, res) => {
   res.status(200).json({
     success: true,
-    message: "Logged out successfully"
+    message: "Logged out successfully",
   });
 };
