@@ -4,6 +4,9 @@ import { protectedRout } from "../Middlewares/Authentication.js";
 import { validate } from "../Middlewares/Validate.js";
 import { userSchema } from "../Schema/User.js";
 const router = express.Router();
+router.get("/test", (req, res) => {
+  res.send("Auth Route Working");
+});
 router.post("/register", validate(userSchema), signUp)
 router.post("/login", protectedRout, logIn);
 router.post("/logout", protectedRout, logOut)

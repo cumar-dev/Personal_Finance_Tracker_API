@@ -38,29 +38,38 @@ export const signUp = async (req, res, next) => {
   }
 };
 
-export const logIn = (req, res, next) => {
-  let { email, password } = req.body;
+export const logIn = async (req, res, next) => {
   try {
+    let { email, password } = req.body;
+
     if (!email || !password) {
-      return res.status(400).json({ message: "All fields are required" });
+      return res.status(400).json({
+        message: "All fields are required",
+      });
     }
+
     email = email.toLowerCase();
-    const emailExist = await User.findOne({email});
-   if (!emailExist || !(await emailExist.comparePassword(password))) {
-      return res.status(401).json({ message: "invalid email or password" });
+
+    const user = await User.findOne({ email });
+
+    if (!user || !(await user.comparePassword(password))) {
+      return res.status(401).json({
+        message: "Invalid email or password",
+      });
     }
-    const token = jwtToken(emailExist._id);
-    return res.json({
-        token,
-        user: {
-            id: emailExist.id,
-            name: emailExist.name,
-            email: emailExist.email,
-            password: emailExist.password,
-            role: emailExist.role,
-            profile: emailExist.profile
-        }
-    })
+
+    const token = jwtToken(user._id);
+
+    return res.status(200).json({
+      token,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        profile: user.profile,
+      },
+    });
   } catch (error) {
     next(error);
   }
