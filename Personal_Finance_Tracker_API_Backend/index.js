@@ -6,13 +6,14 @@ import cors from "cors";
 import rateLimit from "express-rate-limit";
 import { Logger } from "./Middlewares/Logger.js";
 import { errorHandler } from "./Middlewares/errorHandler.js";
-
+import authRout from "./Router/Auth.js"
 dotnev.config();
 mongoose.set("sanitizeFilter", true);
 const app = express();
 const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(Logger);
+app.use("/auth", )
 app.use(errorHandler);
 
 mongoose
