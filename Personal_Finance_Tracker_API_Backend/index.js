@@ -13,7 +13,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(Logger);
-app.use("/auth", )
+app.use("/auth", authRout);
 app.use(errorHandler);
 
 mongoose
