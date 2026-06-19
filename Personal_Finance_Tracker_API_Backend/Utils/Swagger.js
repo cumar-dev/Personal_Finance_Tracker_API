@@ -1,34 +1,37 @@
-import swaggerJSDoc from 'swagger-jsdoc';
+import swaggerJSDoc from "swagger-jsdoc";
 
 const options = {
   definition: {
-    openapi: '3.0.0',
+    openapi: "3.0.0",
     info: {
-      title: 'Task Manager API',
-      version: '1.0.0',
-      description: 'API documentation for our task manager backend'
+      title: "Personal Finance Tracker API",
+      version: "1.0.0",
+      description:
+        "API documentation for personal finance tracker backend",
     },
     servers: [
       {
-        url: 'http://localhost:3000'
-      }
+        url: "http://localhost:3000",
+      },
     ],
     components: {
       securitySchemes: {
         bearerAuth: {
-          type: 'http',
-          scheme: 'bearer',
-          bearerFormat: 'JWT'
-        }
-      }
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
+        },
+      },
     },
     security: [
       {
-        bearerAuth: []
-      }
-    ]
+        bearerAuth: [],
+      },
+    ],
   },
-  apis: ['./Router/*.js'] // Where your route files live
+
+  // IMPORTANT: make sure path is correct
+  apis: ["./Router/*.js"],
 };
 
 export const swaggerSpec = swaggerJSDoc(options);

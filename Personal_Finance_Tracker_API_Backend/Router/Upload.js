@@ -5,7 +5,7 @@ import { upload } from "../Middlewares/Upload.js";
 const router = express.Router();
 /**
  * @swagger
- * /auth/profile-picture:
+ * /upload/profile-picture:
  *   post:
  *     summary: Upload user profile picture
  *     tags: [Authentication]
