@@ -82,8 +82,6 @@ export const logOut = (req, res) => {
   });
 };
 
-import User from "../Model/User.js";
-import Transaction from "../Model/Transaction.js";
 
 export const getAdminOverview = async (req, res, next) => {
   try {
