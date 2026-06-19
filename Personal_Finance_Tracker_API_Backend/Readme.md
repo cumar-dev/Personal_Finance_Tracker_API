@@ -15,3 +15,4 @@ git remote add origin https://github.com/cumar-dev/Personal_Finance_Tracker_API.
 git push -u origin main
 
 Swagger_Url= "http://localhost:3000/Personal_Finance_Tracker_API-docs/"
+render_Url = "https://personal-finance-tracker-api-jyur.onrender.com"
