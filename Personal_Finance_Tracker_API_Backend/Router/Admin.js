@@ -8,8 +8,7 @@ const router = express.Router();
  * @swagger
  * /admin/dashboard:
  *   get:
- *     summary: Admin dashboard access
- *     description: Only accessible by authenticated users with admin role
+ *     summary: Admin dashboard (admin only)
  *     tags: [Admin]
  *     security:
  *       - bearerAuth: []
@@ -21,11 +20,13 @@ const router = express.Router();
  *             schema:
  *               type: object
  *               properties:
+ *                 success:
+ *                   type: boolean
  *                 message:
  *                   type: string
- *                   example: welcome to admin dashboard
+ *                   example: Welcome to admin dashboard Omar
  *       401:
- *         description: Unauthorized (no token or invalid token)
+ *         description: Unauthorized
  *       403:
  *         description: Forbidden (not admin)
  */
@@ -36,15 +37,52 @@ router.get("/dashboard", protectedRout, authorization("admin"), (req, res) => {
  * @swagger
  * /admin/overview:
  *   get:
- *     summary: Get admin dashboard overview (only admin users)
+ *     summary: Get admin dashboard overview
  *     tags: [Admin]
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Admin overview data (users, transactions, income, expense, top categories)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     totalUsers:
+ *                       type: number
+ *                       example: 10
+ *                     totalTransactions:
+ *                       type: number
+ *                       example: 50
+ *                     totalIncome:
+ *                       type: number
+ *                       example: 5000
+ *                     totalExpense:
+ *                       type: number
+ *                       example: 3000
+ *                     balance:
+ *                       type: number
+ *                       example: 2000
+ *                     topSpendingCategories:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           category:
+ *                             type: string
+ *                             example: Food
+ *                           totalSpent:
+ *                             type: number
+ *                             example: 1200
  *       401:
- *         description: Unauthorized (no token)
+ *         description: Unauthorized
  *       403:
  *         description: Forbidden (not admin)
  */

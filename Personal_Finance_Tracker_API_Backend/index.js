@@ -26,7 +26,7 @@ app.use(cors({
 app.use(helmet());
 app.use(limiter);
 app.use(Logger);
-app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use('/Personal_Finance_Tracker_API-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }

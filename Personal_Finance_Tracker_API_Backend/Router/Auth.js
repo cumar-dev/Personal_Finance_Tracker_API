@@ -26,17 +26,25 @@ router.get("/test", (req, res) => {
  *             properties:
  *               name:
  *                 type: string
+ *                 example: Omar Abdi
  *               email:
  *                 type: string
+ *                 example: omar@gmail.com
  *               password:
  *                 type: string
+ *                 example: 123456
  *               role:
  *                 type: string
+ *                 enum: [user, admin]
+ *                 example: user
  *               profile:
  *                 type: string
+ *                 example: https://avatar.com/me.png
  *     responses:
  *       201:
  *         description: User registered successfully
+ *       400:
+ *         description: Bad request
  */
 router.post("/register", validate(userSchema), signUp);
 /**
@@ -57,11 +65,15 @@ router.post("/register", validate(userSchema), signUp);
  *             properties:
  *               email:
  *                 type: string
+ *                 example: omar@gmail.com
  *               password:
  *                 type: string
+ *                 example: 123456
  *     responses:
  *       200:
- *         description: Login successful
+ *         description: Login successful (returns token)
+ *       401:
+ *         description: Invalid credentials
  */
 router.post("/login", logIn);
 /**
@@ -74,7 +86,7 @@ router.post("/login", logIn);
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: User logged out successfully
+ *         description: Logged out successfully
  *       401:
  *         description: Unauthorized
  */
@@ -83,13 +95,13 @@ router.post("/logout", protectedRout, logOut);
  * @swagger
  * /auth/profile:
  *   get:
- *     summary: Get current user's profile
+ *     summary: Get logged-in user profile
  *     tags: [Authentication]
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: User profile retrieved successfully
+ *         description: User profile data (password excluded)
  *         content:
  *           application/json:
  *             schema:
@@ -102,6 +114,13 @@ router.post("/logout", protectedRout, logOut);
  *                 email:
  *                   type: string
  *                 role:
+ *                   type: string
+ *                   enum: [user, admin]
+ *                 profile:
+ *                   type: string
+ *                 createdAt:
+ *                   type: string
+ *                 updatedAt:
  *                   type: string
  *       401:
  *         description: Unauthorized

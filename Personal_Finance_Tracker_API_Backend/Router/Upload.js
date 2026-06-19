@@ -5,10 +5,10 @@ import { upload } from "../Middlewares/Upload.js";
 const router = express.Router();
 /**
  * @swagger
- * /upload/profile-picture:
+ * /auth/profile-picture:
  *   post:
- *     summary: Upload profile picture
- *     tags: [Upload]
+ *     summary: Upload user profile picture
+ *     tags: [Authentication]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -23,16 +23,13 @@ const router = express.Router();
  *               file:
  *                 type: string
  *                 format: binary
- *                 description: Image file to upload
  *     responses:
  *       200:
- *         description: File uploaded successfully
+ *         description: Profile picture uploaded successfully
  *       400:
  *         description: No file uploaded
  *       401:
  *         description: Unauthorized
- *       500:
- *         description: Server error
  */
-router.post("/profile-picture", protectedRout, upload.single("file"), uploadFile)
+router.post("/profile-picture", protectedRout, upload.single("file"), uploadFile);
 export default router;
