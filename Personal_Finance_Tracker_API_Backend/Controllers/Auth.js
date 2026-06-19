@@ -1,4 +1,5 @@
 import User from "../Models/User.js";
+import Transaction from "../Models/Transactions.js";
 import { jwtToken } from "../Utils/jwtToken.js";
 export const signUp = async (req, res, next) => {
   let { name, email, password, role, profile } = req.body;

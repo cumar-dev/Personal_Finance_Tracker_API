@@ -1,12 +1,20 @@
+import mongoose from "mongoose";
 import Transactions from "../Models/Transactions.js";
+
+const getAuthenticatedUserId = (user) =>
+  new mongoose.Types.ObjectId(user._id);
+
+const stripProtectedFields = (body = {}) => {
+  const { userId, _id, ...data } = body;
+  return data;
+};
 
 export const createTransaction = async (req, res, next) => {
   try {
     const newTransaction = await Transactions.create({
-      ...req.body,
-      userId: req.user._id,
-    });
-    res.status(201).json(newTransaction);
+      ...stripProtectedFields(req.body),
+      userId: getAuthenticatedUserId(req.user),
+    });    res.status(201).json(newTransaction);
   } catch (error) {
     next(error);
   }
@@ -14,7 +22,9 @@ export const createTransaction = async (req, res, next) => {
 
 export const getAllTransactions = async (req, res, next) => {
   try {
-    const getTransactions = await Transactions.find({ userId: req.user._id });
+    const getTransactions = await Transactions.find({
+      userId: getAuthenticatedUserId(req.user),
+    });
     res.json(getTransactions);
   } catch (error) {
     next(error);
@@ -22,11 +32,15 @@ export const getAllTransactions = async (req, res, next) => {
 };
 
 export const getOneTransaction = async (req, res, next) => {
-  const { id } = req.params;
+  const id = req.params.id?.trim();
   try {
+    if (!mongoose.isValidObjectId(id)) {
+      return res.status(400).json({ message: "Invalid transaction id" });
+    }
+
     const oneTransaction = await Transactions.findOne({
-      id: id,
-      userId: req.user._id,
+      _id: id,
+      userId: getAuthenticatedUserId(req.user),
     });
     if (!oneTransaction) {
       return res.status(404).json({
@@ -40,11 +54,15 @@ export const getOneTransaction = async (req, res, next) => {
 };
 
 export const updateTransaction = async (req, res, next) => {
-  const { id } = req.params;
+  const id = req.params.id?.trim();
   try {
-    const transaction = await Transactions.findByIdAndUpdate(
-      { _id: id, userId: req.user._id },
-      req.body,
+    if (!mongoose.isValidObjectId(id)) {
+      return res.status(400).json({ message: "Invalid transaction id" });
+    }
+
+    const transaction = await Transactions.findOneAndUpdate(
+      { _id: id, userId: getAuthenticatedUserId(req.user) },
+      stripProtectedFields(req.body),
       { new: true },
     );
     if (!transaction) {
@@ -62,17 +80,28 @@ export const updateTransaction = async (req, res, next) => {
 };
 
 export const deleteTransaction = async (req, res, next) => {
-  const { id } = req.params;
+  const id = req.params.id?.trim();
   try {
-    const transaction = await Transactions.findByIdAndDelete({
-      _id: id,
-      userId: req.user._id,
-    });
-    if (!transaction) {
-      return res
-        .status(404)
-        .json({ message: "transaction need to delete not found" });
+    if (!mongoose.isValidObjectId(id)) {
+      return res.status(400).json({ message: "Invalid transaction id" });
     }
+
+    const transaction = await Transactions.findById(id);
+
+    if (!transaction) {
+      return res.status(404).json({ message: "Transaction not found" });
+    }
+
+    if (
+      transaction.userId.toString() !== getAuthenticatedUserId(req.user).toString()
+    ) {
+      return res.status(403).json({
+        message:
+          "You can only delete your own transactions. Login again and use the same Bearer token you used to create it.",
+      });
+    }
+
+    await transaction.deleteOne();
     res.json({ message: "transaction deleted successfully" });
   } catch (error) {
     next(error);
@@ -93,10 +122,10 @@ export const getMonthlySummary = async (req, res, next) => {
       1
     );
 
-    const summary = await Transaction.aggregate([
+    const summary = await Transactions.aggregate([
       {
         $match: {
-          user: req.user._id,
+          userId: getAuthenticatedUserId(req.user),
           date: {
             $gte: startOfMonth,
             $lt: endOfMonth,

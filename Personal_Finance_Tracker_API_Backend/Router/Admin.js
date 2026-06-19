@@ -32,6 +32,21 @@ const router = express.Router();
 router.get("/dashboard", protectedRout, authorization("admin"), (req, res) => {
   res.json({ message: `welcome to admin dashboard ${req.user.name}` });
 });
-
+/**
+ * @swagger
+ * /admin/overview:
+ *   get:
+ *     summary: Get admin dashboard overview (only admin users)
+ *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Admin overview data (users, transactions, income, expense, top categories)
+ *       401:
+ *         description: Unauthorized (no token)
+ *       403:
+ *         description: Forbidden (not admin)
+ */
 router.get("/overview", protectedRout, adminOnly, getAdminOverview);
 export default router;
