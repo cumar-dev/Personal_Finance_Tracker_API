@@ -11,6 +11,7 @@ import { errorHandler } from "./Middlewares/errorHandler.js";
 import authRout from "./Router/Auth.js";
 import adminRout from "./Router/Admin.js";
 import uploadRout from "./Router/Upload.js"
+import transactionRout from "./Router/Transaction.js"
 import { swaggerSpec } from "./Utils/Swagger.js";
 import { limiter } from "./Middlewares/rateLimiter.js";
 dotenv.config();
@@ -35,6 +36,7 @@ app.get("/", (req, res) => {
 app.use("/auth", authRout);
 app.use("/admin", adminRout);
 app.use("/upload", uploadRout);
+app.use("/transaction", transactionRout);
 app.use(errorHandler);
 
 mongoose
