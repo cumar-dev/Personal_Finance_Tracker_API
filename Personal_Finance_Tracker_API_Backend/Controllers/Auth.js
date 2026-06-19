@@ -81,3 +81,76 @@ export const logOut = (req, res) => {
     message: "Logged out successfully",
   });
 };
+
+import User from "../Model/User.js";
+import Transaction from "../Model/Transaction.js";
+
+export const getAdminOverview = async (req, res, next) => {
+  try {
+    const totalUsers = await User.countDocuments();
+
+    const totalTransactions = await Transaction.countDocuments();
+
+    const totals = await Transaction.aggregate([
+      {
+        $group: {
+          _id: "$type",
+          total: {
+            $sum: "$amount",
+          },
+        },
+      },
+    ]);
+
+    const totalIncome =
+      totals.find((item) => item._id === "income")?.total || 0;
+
+    const totalExpense =
+      totals.find((item) => item._id === "expense")?.total || 0;
+
+    const topSpendingCategories = await Transaction.aggregate([
+      {
+        $match: {
+          type: "expense",
+        },
+      },
+      {
+        $group: {
+          _id: "$category",
+          totalSpent: {
+            $sum: "$amount",
+          },
+        },
+      },
+      {
+        $sort: {
+          totalSpent: -1,
+        },
+      },
+      {
+        $limit: 5,
+      },
+      {
+        $project: {
+          _id: 0,
+          category: "$_id",
+          totalSpent: 1,
+        },
+      },
+    ]);
+
+    res.status(200).json({
+      success: true,
+      data: {
+        totalUsers,
+        totalTransactions,
+        totalIncome,
+        totalExpense,
+        balance: totalIncome - totalExpense,
+        topSpendingCategories,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};

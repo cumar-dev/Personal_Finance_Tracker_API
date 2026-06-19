@@ -5,6 +5,7 @@ import swaggerUi from "swagger-ui-express";
 import cors from "cors";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
+import morgan from "morgan";
 import { Logger } from "./Middlewares/Logger.js";
 import { errorHandler } from "./Middlewares/errorHandler.js";
 import authRout from "./Router/Auth.js";
@@ -25,6 +26,9 @@ app.use(helmet());
 app.use(limiter);
 app.use(Logger);
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+if (process.env.NODE_ENV === 'development') {
+  app.use(morgan('dev'));
+}
 app.get("/", (req, res) => {
   res.send("Server is running");
 });

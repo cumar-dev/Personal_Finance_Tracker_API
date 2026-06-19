@@ -1,6 +1,8 @@
 import express from "express";
 import { protectedRout } from "../Middlewares/Authentication.js";
 import { authorization } from "../Middlewares/Authorization.js";
+import { adminOnly } from "../Middlewares/Admin.js";
+import { getAdminOverview } from "../Controllers/Auth.js";
 const router = express.Router();
 /**
  * @swagger
@@ -30,4 +32,6 @@ const router = express.Router();
 router.get("/dashboard", protectedRout, authorization("admin"), (req, res) => {
   res.json({ message: `welcome to admin dashboard ${req.user.name}` });
 });
+
+router.get("/overview", protectedRout, adminOnly, getAdminOverview);
 export default router;
