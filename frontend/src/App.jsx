@@ -7,6 +7,7 @@ function App() {
 
   return (
     <>
+    <h1>Tommorow i will begin frontend of personal finance tracker project.</h1>
     </>
   )
 }
