@@ -1,15 +1,17 @@
-import { useState } from 'react'
+import { useEffect, useState } from "react";
 
-import './App.css'
+import "./App.css";
 
 function App() {
   
 
-  return (
+ return (
     <>
-    <h1>Tommorow i will begin frontend of personal finance tracker project.</h1>
+      
     </>
-  )
+  );
+  
+   
 }
 
-export default App
+export default App;
