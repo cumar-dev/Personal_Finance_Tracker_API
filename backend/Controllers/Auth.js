@@ -2,9 +2,9 @@ import User from "../Models/User.js";
 import Transaction from "../Models/Transactions.js";
 import { jwtToken } from "../Utils/jwtToken.js";
 export const signUp = async (req, res, next) => {
-  let { name, email, password, role, profile } = req.body;
+  let { name, email, password} = req.body;
   try {
-    if (!name || !email || !password || !role || !profile) {
+    if (!name || !email || !password) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
@@ -19,8 +19,8 @@ export const signUp = async (req, res, next) => {
       name,
       email,
       password,
-      role,
-      profile,
+      // role,
+      // profile,
     });
     const token = jwtToken(createUser._id);
     return res.status(201).json({
@@ -30,8 +30,8 @@ export const signUp = async (req, res, next) => {
         name: createUser.name,
         email: createUser.email,
         password: createUser.password,
-        role: createUser.role,
-        profile: createUser.profile,
+        // role: createUser.role,
+        // profile: createUser.profile,
       },
     });
   } catch (error) {
