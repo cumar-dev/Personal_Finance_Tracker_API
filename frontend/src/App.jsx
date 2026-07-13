@@ -1,17 +1,17 @@
-import { useEffect, useState } from "react";
-
+import { Routes, Route } from "react-router-dom";
 import "./App.css";
+import Register from "./Components/Auth/Register";
+import Login from "./Components/Auth/Login";
 
 function App() {
-  
-
- return (
+  return (
     <>
-      <h1 className="text-foreground text-2xl text-center">Tommorow i will begin my capstone project..</h1>
+      <Routes>
+        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
+      </Routes>
     </>
   );
-  
-   
 }
 
 export default App;
