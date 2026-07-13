@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Eye, EyeOff, Mail, User, Lock } from "lucide-react";
-import { Separator } from "@/components/ui/separator";
+import Link from "react-router-dom";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -102,12 +102,12 @@ const Login = () => {
             <CardFooter className="flex flex-col gap-4 pt-0">
               <p className="text-sm text-center text-muted-foreground pt-2">
                 Don't have an account?{" "}
-                <a
+                <Link
                   href="/register"
                   className="font-medium text-foreground hover:underline underline-offset-4"
                 >
                   Sign in
-                </a>
+                </Link>
               </p>
             </CardFooter>
           </Card>

@@ -15,7 +15,6 @@ import transactionRout from "./Router/Transaction.js"
 import { swaggerSpec } from "./Utils/Swagger.js";
 import { limiter } from "./Middlewares/rateLimiter.js";
 dotenv.config();
-mongoose.set("sanitizeFilter", true);
 const app = express();
 const PORT = process.env.PORT || 3000;
 app.use(express.json());
@@ -26,17 +25,17 @@ app.use(cors({
 app.use(helmet());
 app.use(limiter);
 app.use(Logger);
-app.use('/Personal_Finance_Tracker_API-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use('/api/Personal_Finance_Tracker_API-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 app.get("/", (req, res) => {
   res.send("Server is running");
 });
-app.use("/auth", authRout);
-app.use("/admin", adminRout);
-app.use("/upload", uploadRout);
-app.use("/transaction", transactionRout);
+app.use("/api/auth", authRout);
+app.use("/api/admin", adminRout);
+app.use("/api/upload", uploadRout);
+app.use("/api/transaction", transactionRout);
 app.use(errorHandler);
 
 mongoose
