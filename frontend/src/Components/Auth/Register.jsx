@@ -8,13 +8,17 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Eye, EyeOff, Mail, User, Lock } from "lucide-react";
+import { Eye, EyeOff, Mail, User, Lock, LoaderCircle } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+import { useMutation } from "@tanstack/react-query";
+import { Api } from "@/Lib/Api/ApiCient";
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -22,6 +26,66 @@ const Register = () => {
     confirmPassword: "",
   });
   const [error, setError] = useState(null);
+
+  const registerMutation = useMutation({
+    mutationFn: async (userData) => {
+      const response = await Api.post("/auth/register", userData);
+      console.log("response", response);
+      return response.data;
+    },
+    onSuccess: (data) => {
+      console.log("register data:", data);
+      setFormData({
+        fullName: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+      });
+      navigate("/login");
+    },
+    onError: (error) => {
+      console.error("error", error.message);
+      toast.error("registration failed");
+    },
+  });
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    try {
+      if (
+        !formData.fullName.trim() ||
+        !formData.email.trim() ||
+        !formData.password.trim() ||
+        !formData.confirmPassword.trim()
+      ) {
+        setError("please fill the fields as to work be continiue...");
+        toast.error("error happened during registaration");
+        return;
+      }
+      console.log(formData);
+      if (formData.password !== formData.confirmPassword) {
+        setError("don't much the two password");
+        toast.error("do not much the two passwords");
+        return;
+      }
+      registerMutation.mutate({
+        name: formData.fullName,
+        email: formData.email,
+        password: formData.password,
+      });
+      toast.success("registration completed successfully");
+    } catch (error) {
+      setError("during registreation is happened an error");
+      console.error("error:", error.message);
+    }
+  };
   return (
     <>
       <div className="min-h-screen flex justify-center items-center bg-muted/40 px-4 py-8">
@@ -38,7 +102,7 @@ const Register = () => {
             </CardHeader>
 
             <CardContent className="pt-4">
-              <form className="space-y-4">
+              <form onSubmit={handleSubmit} className="space-y-4">
                 {/* Full Name */}
                 <div className="space-y-1.5">
                   <Label htmlFor="fullName" className="text-sm font-medium">
@@ -56,6 +120,7 @@ const Register = () => {
                       className="rounded-xl pl-9 h-10"
                       required
                       value={formData.fullName}
+                      onChange={handleChange}
                     />
                   </div>
                 </div>
@@ -78,6 +143,7 @@ const Register = () => {
                       className="rounded-xl pl-9 h-10"
                       required
                       value={formData.email}
+                      onChange={handleChange}
                     />
                   </div>
                 </div>
@@ -100,6 +166,7 @@ const Register = () => {
                       className="rounded-xl pl-9 pr-10 h-10"
                       required
                       value={formData.password}
+                      onChange={handleChange}
                     />
                     <button
                       type="button"
@@ -135,6 +202,7 @@ const Register = () => {
                       className="rounded-xl pl-9 pr-10 h-10"
                       required
                       value={formData.confirmPassword}
+                      onChange={handleChange}
                     />
                     <button
                       type="button"
@@ -158,9 +226,16 @@ const Register = () => {
                 <Button
                   type="submit"
                   className="w-full rounded-xl h-10 mt-2 font-medium"
-                  disabled={isSubmitting}
+                  disabled={registerMutation.isPending}
                 >
-                  Create account
+                  {registerMutation.isPending ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <LoaderCircle className="h-4 w-4 animate-spin" />
+                      Creating account...
+                    </span>
+                  ) : (
+                    "Create Account"
+                  )}
                 </Button>
               </form>
             </CardContent>
@@ -173,12 +248,12 @@ const Register = () => {
               </div>
               <p className="text-sm text-center text-muted-foreground">
                 Already have an account?{" "}
-                <a
-                  href="/login"
+                <Link
+                  to="/login"
                   className="font-medium text-foreground hover:underline underline-offset-4"
                 >
                   Sign in
-                </a>
+                </Link>
               </p>
             </CardFooter>
           </Card>

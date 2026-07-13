@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Eye, EyeOff, Mail, User, Lock } from "lucide-react";
-import Link from "react-router-dom";
+import {Link} from "react-router-dom";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -19,6 +19,13 @@ const Login = () => {
     password: "",
   });
   const [error, setError] = useState(null);
+   const handleChange = (e)=> {
+    const {name, value} = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }))
+  }
   return (
     <>
       <div className="min-h-screen flex justify-center items-center bg-muted/40 px-4 py-8">
@@ -53,6 +60,7 @@ const Login = () => {
                       className="rounded-xl pl-9 h-10"
                       required
                        value={formData.email}
+                       onChange={handleChange}
                     />
                   </div>
                 </div>
@@ -75,6 +83,7 @@ const Login = () => {
                       className="rounded-xl pl-9 pr-10 h-10"
                       required
                        value={formData.password}
+                       onChange={handleChange}
                     />
                     <button
                       type="button"
@@ -103,10 +112,10 @@ const Login = () => {
               <p className="text-sm text-center text-muted-foreground pt-2">
                 Don't have an account?{" "}
                 <Link
-                  href="/register"
+                  to="/register"
                   className="font-medium text-foreground hover:underline underline-offset-4"
                 >
-                  Sign in
+                  Sign up
                 </Link>
               </p>
             </CardFooter>
