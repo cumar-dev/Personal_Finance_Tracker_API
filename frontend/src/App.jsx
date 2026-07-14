@@ -2,7 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import "./App.css";
 import Register from "./Components/Auth/Register";
 import Login from "./Components/Auth/Login";
-import DashboardLayout from "./Pages/DashboardLayout";
+import DashboardLayout from "./Components/DashboardLayout"
 import ProtectedRout from "./Components/Auth/ProtectedRout";
 import AdminPage from "./Pages/Admin/AdminPage";
 import AdminRout from "./Components/Auth/AdminRout";
@@ -17,7 +17,8 @@ function App() {
           path="/dashboard"
           element={
             <ProtectedRout>
-              <DashboardLayout />
+              <DashboardLayout
+               />
             </ProtectedRout>
           }
         />
