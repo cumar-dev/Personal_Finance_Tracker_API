@@ -8,24 +8,69 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Eye, EyeOff, Mail, User, Lock } from "lucide-react";
-import {Link} from "react-router-dom";
-
+import { Eye, EyeOff, Mail, Lock, LoaderCircle } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import { Api } from "@/Lib/Api/ApiCient";
+import { useAuthStore } from "@/Lib/Store/AuthStore";
+import { toast } from "sonner";
 const Login = () => {
+  const { setAuth } = useAuthStore();
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
   const [error, setError] = useState(null);
-   const handleChange = (e)=> {
-    const {name, value} = e.target;
+  const loginMutation = useMutation({
+    mutationFn: async (data) => {
+      const response = await Api.post("/auth/login", data);
+      console.log("login response", response);
+      return response.data;
+    },
+    onSuccess: (data) => {
+      if (!data?.token) {
+        setError("Login failed");
+        toast.error("log in failed too early..");
+        return;
+      }
+      setAuth(data.user, data.token);
+      navigate("/dashboard");
+    },
+    onError: (error) => {
+      const message = error.response?.data?.message || "Something went wrong";
+      setError(message);
+      toast.error(message);
+    },
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: value,
-    }))
-  }
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    try {
+      if (!formData.email.trim() || !formData.password.trim()) {
+        setError("fill the fields");
+        toast.error("please fill the fields");
+        return;
+      }
+      console.log(formData);
+      loginMutation.mutate({
+        email: formData.email,
+        password: formData.password,
+      });
+      toast.success("Login successful");
+    } catch (error) {
+      console.error("error exist", error.message);
+    }
+  };
   return (
     <>
       <div className="min-h-screen flex justify-center items-center bg-muted/40 px-4 py-8">
@@ -41,7 +86,7 @@ const Login = () => {
             </CardHeader>
 
             <CardContent className="pt-4">
-              <form className="space-y-4">
+              <form onSubmit={handleSubmit} className="space-y-4">
                 {/* Email */}
                 <div className="space-y-1.5">
                   <Label htmlFor="email" className="text-sm font-medium">
@@ -59,8 +104,8 @@ const Login = () => {
                       placeholder="you@example.com"
                       className="rounded-xl pl-9 h-10"
                       required
-                       value={formData.email}
-                       onChange={handleChange}
+                      value={formData.email}
+                      onChange={handleChange}
                     />
                   </div>
                 </div>
@@ -82,8 +127,8 @@ const Login = () => {
                       placeholder="At least 8 characters"
                       className="rounded-xl pl-9 pr-10 h-10"
                       required
-                       value={formData.password}
-                       onChange={handleChange}
+                      value={formData.password}
+                      onChange={handleChange}
                     />
                     <button
                       type="button"
@@ -101,9 +146,16 @@ const Login = () => {
                 <Button
                   type="submit"
                   className="w-full rounded-xl h-10 mt-2 font-medium"
-                  disabled={isSubmitting}
+                  disabled={loginMutation.isPending}
                 >
-                 Sign in
+                  {loginMutation.isPending ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <LoaderCircle className="h-4 w-4 animate-spin" />
+                      Login account...
+                    </span>
+                  ) : (
+                    "Sign in"
+                  )}
                 </Button>
               </form>
             </CardContent>
