@@ -4,11 +4,11 @@ import Register from "./Components/Auth/Register";
 import Login from "./Components/Auth/Login";
 import DashboardLayout from "./Components/DashboardLayout"
 import ProtectedRout from "./Components/Auth/ProtectedRout";
-import AdminPage from "./Pages/Admin/AdminPage";
 import AdminRout from "./Components/Auth/AdminRout";
 import Header from "./Pages/Header";
 import Home from "./Pages/Home";
-
+import AdminPage from "./Admin/AdminPage";
+import Profile from "./Dashboard/Profile";
 function App() {
   return (
     <>
@@ -34,6 +34,7 @@ function App() {
         />
         <Route path="/header" element={<Header />}/>
         <Route path="/home" element={<Home />}/>
+        <Route path="/profile" element={<Profile />}/>
       </Routes>
     </>
   );
