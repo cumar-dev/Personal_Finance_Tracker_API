@@ -10,17 +10,20 @@ import Profile from "./Dashboard/Profile";
 import MainLayout from "./Layout/MainLayout";
 import DashboardPage from "./Dashboard/DashboardPage";
 import DashboardLayout from "./Components/DashboardLayout";
-import About from "./Pages/About";
+import GuestRoute from "./Components/Auth/GuestRoute";
+
 function App() {
   return (
     <>
       <Routes>
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
+        <Route element={<GuestRoute />}>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+        </Route>
 
         <Route element={<MainLayout />}>
           <Route path="/home" element={<Home />} />
-          </Route>
+        </Route>
 
         <Route
           path="/dashboard"
