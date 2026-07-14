@@ -2,28 +2,37 @@ import { Routes, Route } from "react-router-dom";
 import "./App.css";
 import Register from "./Components/Auth/Register";
 import Login from "./Components/Auth/Login";
-import DashboardLayout from "./Components/DashboardLayout"
 import ProtectedRout from "./Components/Auth/ProtectedRout";
 import AdminRout from "./Components/Auth/AdminRout";
-import Header from "./Pages/Header";
 import Home from "./Pages/Home";
 import AdminPage from "./Admin/AdminPage";
 import Profile from "./Dashboard/Profile";
+import MainLayout from "./Layout/MainLayout";
+import DashboardPage from "./Dashboard/DashboardPage";
+import DashboardLayout from "./Components/DashboardLayout";
+import About from "./Pages/About";
 function App() {
   return (
     <>
       <Routes>
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+
+        <Route element={<MainLayout />}>
+          <Route path="/home" element={<Home />} />
+          </Route>
+
         <Route
           path="/dashboard"
           element={
             <ProtectedRout>
-              <DashboardLayout
-               />
+              <DashboardLayout />
             </ProtectedRout>
           }
-        />
+        >
+          <Route index element={<DashboardPage />} />
+          <Route path="profile" element={<Profile />} />
+        </Route>
         <Route
           path="/admin"
           element={
@@ -32,9 +41,6 @@ function App() {
             </AdminRout>
           }
         />
-        <Route path="/header" element={<Header />}/>
-        <Route path="/home" element={<Home />}/>
-        <Route path="/profile" element={<Profile />}/>
       </Routes>
     </>
   );

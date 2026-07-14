@@ -10,7 +10,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useAuthStore } from "@/lib/store/AuthStore";
-import { ChevronDown, User, Settings, LogOut, LayoutDashboard } from "lucide-react";
+import {
+  ChevronDown,
+  User,
+  Settings,
+  LogOut,
+  LayoutDashboard,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const NAV_LINKS = [
