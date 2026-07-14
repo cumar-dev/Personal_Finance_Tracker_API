@@ -6,6 +6,8 @@ import DashboardLayout from "./Components/DashboardLayout"
 import ProtectedRout from "./Components/Auth/ProtectedRout";
 import AdminPage from "./Pages/Admin/AdminPage";
 import AdminRout from "./Components/Auth/AdminRout";
+import Header from "./Pages/Header";
+import Home from "./Pages/Home";
 
 function App() {
   return (
@@ -30,6 +32,8 @@ function App() {
             </AdminRout>
           }
         />
+        <Route path="/header" element={<Header />}/>
+        <Route path="/home" element={<Home />}/>
       </Routes>
     </>
   );
