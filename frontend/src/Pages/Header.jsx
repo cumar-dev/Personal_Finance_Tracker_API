@@ -18,7 +18,7 @@ import {
   LayoutDashboard,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-
+import ThemeToggle from "@/Components/ThemeToggle";
 const NAV_LINKS = [
   { to: "/home", label: "Home" },
   { to: "/dashboard", label: "Dashboard" },
@@ -75,87 +75,88 @@ const Header = () => {
         </nav>
 
         {/* User */}
-        <DropdownMenu>
-          <DropdownMenuTrigger
-            className={cn(
-              buttonVariants({ variant: "ghost" }),
-              "flex items-center gap-2 rounded-full pl-1.5 pr-3 h-10 border border-border",
-              "hover:bg-muted hover:border-border/80 transition-colors",
-              "data-[state=open]:bg-muted data-[state=open]:border-border/80",
-            )}
-          >
-            <div className="flex h-7 w-7 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-semibold">
-              {getInitials(user?.name)}
-            </div>
+        {/* Actions */}
+        <div className="flex items-center gap-3">
+          {/* Dark / Light Mode */}
+          <ThemeToggle />
 
-            <span className="hidden sm:block text-sm font-medium">
-              {user?.name?.split(" ")[0] ?? "User"}
-            </span>
-
-            <ChevronDown className="h-3.5 w-3.5 text-muted-foreground transition-transform data-[state=open]:rotate-180" />
-          </DropdownMenuTrigger>
-
-          <DropdownMenuContent
-            align="end"
-            sideOffset={10}
-            className="w-64 p-1.5 rounded-xl border border-border shadow-lg shadow-black/[0.04]"
-          >
-            <div className="flex items-center gap-3 px-2.5 py-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground text-sm font-semibold shrink-0 ring-2 ring-primary/10">
+          {/* User Dropdown */}
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              className={cn(
+                buttonVariants({ variant: "ghost" }),
+                "flex items-center gap-2 rounded-full pl-1.5 pr-3 h-10 border border-border",
+                "hover:bg-muted hover:border-border/80 transition-colors",
+                "data-[state=open]:bg-muted data-[state=open]:border-border/80",
+              )}
+            >
+              <div className="flex h-7 w-7 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-semibold">
                 {getInitials(user?.name)}
               </div>
-              <div className="min-w-0">
-                <p className="truncate text-sm font-semibold leading-none text-foreground">
-                  {user?.name ?? "User"}
-                </p>
-                <p className="truncate text-xs text-muted-foreground mt-1.5">
-                  {user?.email ?? ""}
-                </p>
-              </div>
-            </div>
 
-            <DropdownMenuSeparator className="mx-0 mb-1.5" />
+              <span className="hidden sm:block text-sm font-medium">
+                {user?.name?.split(" ")[0] ?? "User"}
+              </span>
 
-            <DropdownMenuGroup className="flex flex-col gap-0.5">
-              <DropdownMenuItem className="gap-2.5 rounded-lg px-2.5 py-2 text-sm cursor-pointer focus:bg-muted">
-                <Link to="/dashboard" className="flex items-center gap-2.5">
-                  <LayoutDashboard
-                    className="h-4 w-4 text-muted-foreground"
-                    strokeWidth={2}
-                  />
-                  Dashboard
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem className="gap-2.5 rounded-lg px-2.5 py-2 text-sm cursor-pointer focus:bg-muted">
-                <Link to="/profile" className="flex items-center gap-2.5">
-                  <User
-                    className="h-4 w-4 text-muted-foreground"
-                    strokeWidth={2}
-                  />
-                  Profile
-                </Link>
-              </DropdownMenuItem>
+              <ChevronDown className="h-3.5 w-3.5 text-muted-foreground transition-transform data-[state=open]:rotate-180" />
+            </DropdownMenuTrigger>
 
-              <DropdownMenuItem className="gap-2.5 rounded-lg px-2.5 py-2 text-sm cursor-pointer focus:bg-muted">
-                <Settings
-                  className="h-4 w-4 text-muted-foreground"
-                  strokeWidth={2}
-                />
-                Settings
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-
-            <DropdownMenuSeparator className="mx-0 my-1.5" />
-
-            <DropdownMenuItem
-              onClick={handleLogout}
-              className="gap-2.5 rounded-lg px-2.5 py-2 text-sm cursor-pointer text-destructive focus:text-destructive focus:bg-destructive/10"
+            <DropdownMenuContent
+              align="end"
+              sideOffset={10}
+              className="w-64 p-1.5 rounded-xl border border-border shadow-lg shadow-black/[0.04]"
             >
-              <LogOut className="h-4 w-4" strokeWidth={2} />
-              Logout
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+              <div className="flex items-center gap-3 px-2.5 py-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground text-sm font-semibold shrink-0 ring-2 ring-primary/10">
+                  {getInitials(user?.name)}
+                </div>
+
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-semibold leading-none text-foreground">
+                    {user?.name ?? "User"}
+                  </p>
+
+                  <p className="truncate text-xs text-muted-foreground mt-1.5">
+                    {user?.email ?? ""}
+                  </p>
+                </div>
+              </div>
+
+              <DropdownMenuSeparator className="mx-0 mb-1.5" />
+
+              <DropdownMenuGroup className="flex flex-col gap-0.5">
+                <DropdownMenuItem className="gap-2.5 rounded-lg px-2.5 py-2 text-sm cursor-pointer focus:bg-muted">
+                  <Link to="/dashboard" className="flex items-center gap-2.5">
+                    <LayoutDashboard className="h-4 w-4 text-muted-foreground" />
+                    Dashboard
+                  </Link>
+                </DropdownMenuItem>
+
+                <DropdownMenuItem className="gap-2.5 rounded-lg px-2.5 py-2 text-sm cursor-pointer focus:bg-muted">
+                  <Link to="/profile" className="flex items-center gap-2.5">
+                    <User className="h-4 w-4 text-muted-foreground" />
+                    Profile
+                  </Link>
+                </DropdownMenuItem>
+
+                <DropdownMenuItem className="gap-2.5 rounded-lg px-2.5 py-2 text-sm cursor-pointer focus:bg-muted">
+                  <Settings className="h-4 w-4 text-muted-foreground" />
+                  Settings
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+
+              <DropdownMenuSeparator className="mx-0 my-1.5" />
+
+              <DropdownMenuItem
+                onClick={handleLogout}
+                className="gap-2.5 rounded-lg px-2.5 py-2 text-sm cursor-pointer text-destructive focus:text-destructive focus:bg-destructive/10"
+              >
+                <LogOut className="h-4 w-4" />
+                Logout
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
     </header>
   );
