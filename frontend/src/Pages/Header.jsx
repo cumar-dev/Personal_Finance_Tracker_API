@@ -138,11 +138,6 @@ const Header = () => {
                     Profile
                   </Link>
                 </DropdownMenuItem>
-
-                <DropdownMenuItem className="gap-2.5 rounded-lg px-2.5 py-2 text-sm cursor-pointer focus:bg-muted">
-                  <Settings className="h-4 w-4 text-muted-foreground" />
-                  Settings
-                </DropdownMenuItem>
               </DropdownMenuGroup>
 
               <DropdownMenuSeparator className="mx-0 my-1.5" />
