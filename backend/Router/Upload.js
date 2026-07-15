@@ -1,6 +1,6 @@
 import express from "express";
 import { protectedRout } from "../Middlewares/Authentication.js";
-import { uploadFile } from "../Controllers/Upload.js";
+import { updateProfileImage, uploadFile } from "../Controllers/Upload.js";
 import { upload } from "../Middlewares/Upload.js";
 const router = express.Router();
 /**
@@ -32,4 +32,10 @@ const router = express.Router();
  *         description: Unauthorized
  */
 router.post("/profile-picture", protectedRout, upload.single("file"), uploadFile);
+router.put(
+  "/profile-picture",
+  protectedRout,
+  upload.single("file"),
+  updateProfileImage,
+);
 export default router;

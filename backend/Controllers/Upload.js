@@ -38,3 +38,58 @@ export const uploadFile = (req, res, next) => {
 
   stream.end(req.file.buffer);
 };
+
+export const updateProfileImage = async (req, res, next) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({
+        success: false,
+        message: "No file uploaded.",
+      });
+    }
+
+    const user = await User.findById(req.user._id);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found.",
+      });
+    }
+    // if (user.profile?.public_id) {
+    //   await cloudinary.uploader.destroy(user.profile.public_id);
+    // }
+
+    const stream = cloudinary.uploader.unsigned_upload_stream(
+      process.env.CLOUDINARY_UPLOAD_PRESET,
+      {
+        folder: "profile_Picture",
+        resource_type: "auto",
+      },
+      async (error, result) => {
+        try {
+          if (error) return next(error);
+
+          user.profile = {
+            url: result.secure_url,
+            public_id: result.public_id,
+          };
+
+          await user.save();
+
+          return res.status(200).json({
+            success: true,
+            message: "Profile image updated successfully.",
+            user,
+          });
+        } catch (err) {
+          next(err);
+        }
+      },
+    );
+
+    stream.end(req.file.buffer);
+  } catch (error) {
+    next(error);
+  }
+};
