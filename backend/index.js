@@ -14,6 +14,7 @@ import uploadRout from "./Router/Upload.js"
 import transactionRout from "./Router/Transaction.js"
 import { swaggerSpec } from "./Utils/Swagger.js";
 import { limiter } from "./Middlewares/rateLimiter.js";
+import cloudinary from "./Utils/Cloudinary.js";
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -36,6 +37,15 @@ app.use("/api/auth", authRout);
 app.use("/api/admin", adminRout);
 app.use("/api/upload", uploadRout);
 app.use("/api/transaction", transactionRout);
+app.use("/cloudinary-test", async (req, res) => {
+  try {
+    const result = await cloudinary.api.ping();
+    res.json(result);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json(err);
+  }
+});
 app.use(errorHandler);
 
 mongoose

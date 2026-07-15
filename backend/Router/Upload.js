@@ -1,8 +1,17 @@
 import express from "express";
 import { protectedRout } from "../Middlewares/Authentication.js";
-import { updateProfileImage, uploadFile } from "../Controllers/Upload.js";
+import {
+  deleteProfileImage,
+  getProfile,
+  updateProfile,
+  updateProfileImage,
+  uploadFile,
+} from "../Controllers/Upload.js";
 import { upload } from "../Middlewares/Upload.js";
+
 const router = express.Router();
+
+router.get("/profile", protectedRout, getProfile);
 /**
  * @swagger
  * /upload/profile-picture:
@@ -31,11 +40,19 @@ const router = express.Router();
  *       401:
  *         description: Unauthorized
  */
-router.post("/profile-picture", protectedRout, upload.single("file"), uploadFile);
+router.post(
+  "/profile-picture",
+  protectedRout,
+  upload.single("file"),
+  uploadFile,
+);
 router.put(
   "/profile-picture",
   protectedRout,
   upload.single("file"),
   updateProfileImage,
 );
+
+router.put("/profile", protectedRout, updateProfile);
+router.delete("/profile-picture", protectedRout, deleteProfileImage);
 export default router;

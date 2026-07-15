@@ -13,11 +13,10 @@ import { useAuthStore } from "@/lib/store/AuthStore";
 import {
   ChevronDown,
   User,
-  Settings,
   LogOut,
   LayoutDashboard,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn } from "../Lib/utils";
 import ThemeToggle from "@/Components/ThemeToggle";
 const NAV_LINKS = [
   { to: "/home", label: "Home" },

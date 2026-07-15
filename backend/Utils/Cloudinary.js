@@ -13,4 +13,5 @@ console.log("CLOUD NAME LOADED:", process.env.CLOUDINARY_CLOUD_NAME);
 console.log("CLOUD Api_Key LOADED:", process.env.CLOUDINARY_API_KEY);
 console.log("CLOUD Api_Secret LOADED:", process.env.CLOUDINARY_API_SECRET);
 
+console.log(cloudinary.config());
 export default cloudinary;
