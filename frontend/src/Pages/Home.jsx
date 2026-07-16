@@ -254,7 +254,7 @@ function FeatureCard({
 // ---------------------------------------------------------------------------
 // Page
 // ---------------------------------------------------------------------------
-export default function HomePage() {
+const Home = ()=> {
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* ---------------- Header ---------------- */}
@@ -592,3 +592,5 @@ export default function HomePage() {
     </div>
   );
 }
+
+export default Home;
