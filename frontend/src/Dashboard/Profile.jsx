@@ -8,10 +8,10 @@ import { useAuthStore } from "@/Lib/Store/AuthStore";
 import { useUploadProfilePicture, useUpdateProfile } from "@/Hooks/useProfile";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { deleteProfilePicture, getProfile } from "@/Lib/Api/profileApi";
-
+import { toast } from "sonner";
 const MAX_FILE_SIZE_MB = 10;
 
-export default function ProfilePage() {
+const ProfilePage = ()=> {
   const queryClient = useQueryClient();
 
   const { data, isLoading, isError } = useQuery({
@@ -47,7 +47,7 @@ export default function ProfilePage() {
     if (!file) return;
 
     if (file.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
-      alert(`Sawirku waa inuu ka yaraadaa ${MAX_FILE_SIZE_MB}MB`);
+      toast.error(`the image must be same size or less then ${MAX_FILE_SIZE_MB}MB`);
       e.target.value = "";
       return;
     }
@@ -113,8 +113,7 @@ export default function ProfilePage() {
     return (
       <div className="flex min-h-screen items-center justify-center bg-muted/40 px-6 text-center">
         <p className="text-sm text-destructive">
-          Wax baa qaldamay marka profile-ka la soo raray. Fadlan isku day mar
-          kale.
+         An issue happened during production of a profile please try again...
         </p>
       </div>
     );
@@ -274,3 +273,5 @@ export default function ProfilePage() {
     </div>
   );
 }
+
+export default ProfilePage;
