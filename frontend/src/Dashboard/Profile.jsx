@@ -65,7 +65,7 @@ const ProfilePage = ()=> {
         setAvatarUrl(profile?.profile?.url || "");
       },
     });
-    toast.success("photo uploaded successfully...");
+    toast.success("photo updated successfully...");
   };
 
   const handlePickPhoto = () => fileInputRef.current?.click();
@@ -101,7 +101,7 @@ const ProfilePage = ()=> {
         },
       },
     );
-    toast.success("profile updated successfully...");
+    toast.success("profile saved successfully...");
   };
 
   if (isLoading) {

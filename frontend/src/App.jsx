@@ -34,10 +34,10 @@ function App() {
           }
         >
           <Route index element={<DashboardPage />} />
-          {/* <Route path="profile" element={<Profile />} /> */}
+          <Route path="profile" element={<Profile />} />
         </Route>
 
-        <Route path="/profile" element={<Profile />} />
+    
 
         <Route
           path="/admin"
