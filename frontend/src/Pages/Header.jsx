@@ -10,12 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useAuthStore } from "@/lib/store/AuthStore";
-import {
-  ChevronDown,
-  User,
-  LogOut,
-  LayoutDashboard,
-} from "lucide-react";
+import { ChevronDown, User, LogOut, LayoutDashboard } from "lucide-react";
 import { cn } from "../Lib/utils";
 import ThemeToggle from "@/Components/ThemeToggle";
 const NAV_LINKS = [
@@ -90,7 +85,18 @@ const Header = () => {
               )}
             >
               <div className="flex h-7 w-7 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-semibold">
-                {getInitials(user?.name)}
+                {/* {getInitials(user?.name)} */}
+                {user?.profile?.url ? (
+                  <img
+                    src={user.profile.url}
+                    alt={user.name}
+                    className="h-full w-full object-cover rounded-full"
+                  />
+                ) : (
+                  <span className="text-xs font-semibold text-primary-foreground">
+                    {getInitials(user?.name)}
+                  </span>
+                )}
               </div>
 
               <span className="hidden sm:block text-sm font-medium">
@@ -107,7 +113,17 @@ const Header = () => {
             >
               <div className="flex items-center gap-3 px-2.5 py-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground text-sm font-semibold shrink-0 ring-2 ring-primary/10">
-                  {getInitials(user?.name)}
+                  {user?.profile?.url ? (
+                  <img
+                    src={user.profile.url}
+                    alt={user.name}
+                    className="h-full w-full object-cover rounded-full"
+                  />
+                ) : (
+                  <span className="text-xs font-semibold text-primary-foreground">
+                    {getInitials(user?.name)}
+                  </span>
+                )}
                 </div>
 
                 <div className="min-w-0">
