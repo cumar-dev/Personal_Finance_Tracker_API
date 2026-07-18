@@ -4,6 +4,7 @@ import { Plus } from "lucide-react";
 import { useAuthStore } from "@/Lib/Store/AuthStore";
 import { useState } from "react";
 import TransactionForm from "@/Components/Transactions/TransactionForm";
+import TransactionTabs from "@/Components/Transactions/TransactionTabs";
 
 function getGreeting() {
   const hour = new Date().getHours();
@@ -40,11 +41,15 @@ const Transaction = () => {
       </Card>
 
       {/* calling differnt pages in here */}
-      <TransactionForm
+      <div className="pb-5">
+        <TransactionForm
         open={showCreateForm || !!editingTask}
         onOpenChange={handleFormClose}
         task={editingTask}
       />
+      </div>
+     
+      <TransactionTabs />
     </div>
   );
 };
