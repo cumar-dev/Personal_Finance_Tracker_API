@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -13,25 +13,32 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Api } from "@/Lib/Api/ApiCient";
-const TransactionForm = ({ open, onOpenChange, task }) => {
+import { Loader2 } from "lucide-react";
+const TransactionForm = ({ open, onOpenChange, transaction }) => {
   const [error, setError] = useState(null);
+
   const [formData, setFormData] = useState({
-    title: task?.title ?? "",
-    amount: task?.amount ?? "",
-    type: task?.type ?? "expense",
-    category: task?.category ?? "",
-    date: task?.date ? new Date(task.date).toISOString().split("T")[0] : "",
+    title: transaction?.title ?? "",
+    amount: transaction?.amount ?? "",
+    type: transaction?.type ?? "expense",
+    category: transaction?.category ?? "",
+    date: transaction?.date
+      ? new Date(transaction.date).toISOString().split("T")[0]
+      : "",
   });
-  const queryClient = useQueryClient();
-  const createTransaction = useMutation({
-    mutationFn: async (transactionData) => {
-      const response = await Api.post("/transaction/create", transactionData);
-      console.log("created transaction: ", response);
-      return response.data;
-    },
-    onSuccess: () => {
-    queryClient.invalidateQueries({ queryKey: ["transaction"] });
-    toast.success("Transaction created successfully");
+
+  useEffect(() => {
+  if (transaction) {
+    setFormData({
+      title: transaction.title,
+      amount: transaction.amount,
+      type: transaction.type,
+      category: transaction.category,
+      date: new Date(transaction.date)
+        .toISOString()
+        .split("T")[0],
+    });
+  } else {
     setFormData({
       title: "",
       amount: "",
@@ -39,11 +46,56 @@ const TransactionForm = ({ open, onOpenChange, task }) => {
       category: "",
       date: "",
     });
-    onOpenChange(false);
-  },
+  }
+}, [transaction, open]);
+  const queryClient = useQueryClient();
+
+  const createTransaction = useMutation({
+    mutationFn: async (transactionData) => {
+      const response = await Api.post("/transaction/create", transactionData);
+      console.log("created transaction: ", response);
+      return response.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["transaction"] });
+      toast.success("Transaction created successfully");
+      setFormData({
+        title: "",
+        amount: "",
+        type: "expense",
+        category: "",
+        date: "",
+      });
+      onOpenChange(false);
+    },
     onError: (error) => {
       toast.error(error.response?.data?.message || "Transaction failed");
-     
+    },
+  });
+
+  const updateTransaction = useMutation({
+    mutationFn: async (transactionData) => {
+      const response = await Api.put(
+        `/transaction/update/${transaction._id}`,
+        transactionData,
+      );
+
+      return response.data;
+    },
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["transaction"],
+      });
+
+      toast.success("Transaction updated successfully");
+      onOpenChange(false);
+    },
+
+    onError: (error) => {
+      toast.error(
+        error.response?.data?.message || "Failed to update transaction",
+      );
     },
   });
   const handleChange = (e) => {
@@ -88,13 +140,19 @@ const TransactionForm = ({ open, onOpenChange, task }) => {
     console.log("form data", formData);
 
     const TransactionData = {
-      title: formData.title,
-      amount: formData.amount,
+      title: formData.title.trim(),
+      amount: Number(formData.amount),
       type: formData.type,
       category: formData.category,
       date: formData.date,
+    };
+
+    if (transaction) {
+      updateTransaction.mutate(TransactionData);
+    } else {
+      createTransaction.mutate(TransactionData);
     }
-    createTransaction.mutate(TransactionData);
+
     setFormData({
       title: "",
       amount: "",
@@ -103,19 +161,23 @@ const TransactionForm = ({ open, onOpenChange, task }) => {
       date: "",
     });
     onOpenChange(false);
-    toast.success("Transaction created succesfully..")
+    // toast.success("Transaction created succesfully..")
   };
-
+  const isLoading = transaction
+    ? updateTransaction.isPending
+    : createTransaction.isPending;
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md rounded-2xl p-0 overflow-hidden">
         <form onSubmit={handleSubmit}>
           <DialogHeader className="px-6 pt-6">
-            <DialogTitle className="text-lg font-semibold tracking-tight">
-              Add transaction
+            <DialogTitle className="text-lg font-semibold">
+              {transaction ? "Edit Transaction" : "Add Transaction"}
             </DialogTitle>
             <DialogDescription>
-              Log a new expense or income entry.
+              {transaction
+                ? "Update your transaction details."
+                : "Log a new income or expense."}
             </DialogDescription>
           </DialogHeader>
 
@@ -209,8 +271,21 @@ const TransactionForm = ({ open, onOpenChange, task }) => {
             >
               Cancel
             </Button>
-            <Button type="submit" className="rounded-full px-6">
-              Save transaction
+            <Button
+              type="submit"
+              disabled={isLoading}
+              className="rounded-full px-6"
+            >
+              {isLoading ? (
+                <span className="flex items-center gap-2">
+                  <Loader2 size={15} className="animate-spin" />
+                  {transaction ? "Updating..." : "Creating..."}
+                </span>
+              ) : transaction ? (
+                "Update transaction"
+              ) : (
+                "Create transaction"
+              )}
             </Button>
           </DialogFooter>
         </form>

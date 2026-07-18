@@ -1,6 +1,6 @@
 import express from "express";
 import { protectedRout } from "../Middlewares/Authentication.js";
-import { createTransaction, deleteTransaction, getAllTransactions, getMonthlySummary, getOneTransaction, updateTransaction } from "../Controllers/Transactions.js";
+import { createTransaction, deleteTransaction, getAllTransactions, getMonthlySummary, getOneTransaction, getRecentTransactions, updateTransaction } from "../Controllers/Transactions.js";
 const router = express.Router();
 /**
  * @swagger
@@ -53,6 +53,7 @@ router.get("/one/:id", protectedRout, getOneTransaction);
  *         description: Unauthorized
  */
 router.get("/monthly-summary", protectedRout, getMonthlySummary);
+router.get("/recent", protectedRout, getRecentTransactions);
 /**
  * @swagger
  * /transactions/create:

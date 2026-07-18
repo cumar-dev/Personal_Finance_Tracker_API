@@ -14,11 +14,11 @@ function getGreeting() {
 }
 const Transaction = () => {
   const [showCreateForm, setShowCreateForm] = useState(false);
-  const [editingTask, setEditingTask] = useState(null);
+  const [editingTransaction, setEditingTransaction] = useState(null);
   const { user } = useAuthStore();
   const handleFormClose = () => {
     setShowCreateForm(false);
-    setEditingTask(null);
+    setEditingTransaction(null);
   };
   return (
     <div className="bg-muted/40">
@@ -43,9 +43,9 @@ const Transaction = () => {
       {/* calling differnt pages in here */}
       <div className="pb-5">
         <TransactionForm
-        open={showCreateForm || !!editingTask}
+        open={showCreateForm || !!editingTransaction}
         onOpenChange={handleFormClose}
-        task={editingTask}
+        Transaction={editingTransaction}
       />
       </div>
      

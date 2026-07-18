@@ -1,8 +1,7 @@
 import mongoose from "mongoose";
 import Transactions from "../Models/Transactions.js";
 
-const getAuthenticatedUserId = (user) =>
-  new mongoose.Types.ObjectId(user._id);
+const getAuthenticatedUserId = (user) => new mongoose.Types.ObjectId(user._id);
 
 const stripProtectedFields = (body = {}) => {
   const { userId, _id, ...data } = body;
@@ -14,7 +13,8 @@ export const createTransaction = async (req, res, next) => {
     const newTransaction = await Transactions.create({
       ...stripProtectedFields(req.body),
       userId: getAuthenticatedUserId(req.user),
-    });    res.status(201).json(newTransaction);
+    });
+    res.status(201).json(newTransaction);
   } catch (error) {
     next(error);
   }
@@ -93,7 +93,8 @@ export const deleteTransaction = async (req, res, next) => {
     }
 
     if (
-      transaction.userId.toString() !== getAuthenticatedUserId(req.user).toString()
+      transaction.userId.toString() !==
+      getAuthenticatedUserId(req.user).toString()
     ) {
       return res.status(403).json({
         message:
@@ -113,13 +114,13 @@ export const getMonthlySummary = async (req, res, next) => {
     const startOfMonth = new Date(
       new Date().getFullYear(),
       new Date().getMonth(),
-      1
+      1,
     );
 
     const endOfMonth = new Date(
       new Date().getFullYear(),
       new Date().getMonth() + 1,
-      1
+      1,
     );
 
     const summary = await Transactions.aggregate([
@@ -164,6 +165,21 @@ export const getMonthlySummary = async (req, res, next) => {
       income,
       expense,
     });
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+export const getRecentTransactions = async (req, res, next) => {
+  try {
+    const transactions = await Transactions.find({
+      userId: getAuthenticatedUserId(req.user),
+    })
+      .sort({ createdAt: -1 }) 
+      .limit(5); 
+
+    res.status(200).json(transactions);
   } catch (error) {
     next(error);
   }
