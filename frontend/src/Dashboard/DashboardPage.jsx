@@ -4,6 +4,7 @@ import { Plus } from "lucide-react";
 import { useAuthStore } from "@/Lib/Store/AuthStore";
 import { useState } from "react";
 import TransactionForm from "@/Components/Transactions/TransactionForm";
+import TransactionList from "@/Components/Transactions/TransactionList";
 
 function getGreeting() {
   const hour = new Date().getHours();
@@ -51,6 +52,7 @@ const DashboardPage = () => {
       open = {showCreateForm}
       onOpenChange = {setShowCreateForm}
       />
+      <TransactionList />
     </div>
   );
 };

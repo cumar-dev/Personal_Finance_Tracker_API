@@ -29,13 +29,21 @@ const TransactionForm = ({ open, onOpenChange, task }) => {
       console.log("created transaction: ", response);
       return response.data;
     },
-    onSuccess: (success) => {
-      queryClient.invalidateQueries({queryKey: ["transaction"]});
-      toast.success("transaction created success", success);
-    },
+    onSuccess: () => {
+    queryClient.invalidateQueries({ queryKey: ["transaction"] });
+    toast.success("Transaction created successfully");
+    setFormData({
+      title: "",
+      amount: "",
+      type: "expense",
+      category: "",
+      date: "",
+    });
+    onOpenChange(false);
+  },
     onError: (error) => {
-      toast.error("transaction failed", error);
-      return;
+      toast.error(error.response?.data?.message || "Transaction failed");
+     
     },
   });
   const handleChange = (e) => {
@@ -95,6 +103,7 @@ const TransactionForm = ({ open, onOpenChange, task }) => {
       date: "",
     });
     onOpenChange(false);
+    toast.success("Transaction created succesfully..")
   };
 
   return (
