@@ -1,11 +1,12 @@
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/Lib/utils";
-import { LayoutDashboard, Receipt, User, Wallet } from "lucide-react";
+import { Home, LayoutDashboard, Receipt, User, Wallet } from "lucide-react";
 
 const NAV_ITEMS = [
   { label: "Overview", icon: LayoutDashboard, to: "/dashboard" },
   { label: "Transactions", icon: Receipt, to: "/dashboard/transactions" },
   { label: "Profile", icon: User, to: "/dashboard/profile" },
+  { label: "Home", icon: Home, to: "/home"}
 ];
 
 const SideBar = () => {

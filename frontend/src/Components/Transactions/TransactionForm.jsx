@@ -30,6 +30,7 @@ const TransactionForm = ({ open, onOpenChange, task }) => {
       return response.data;
     },
     onSuccess: (success) => {
+      queryClient.invalidateQueries({queryKey: ["transaction"]});
       toast.success("transaction created success", success);
     },
     onError: (error) => {
@@ -44,9 +45,9 @@ const TransactionForm = ({ open, onOpenChange, task }) => {
       [name]: value,
     }));
   };
-  const handleStatusChange = (value) => {
-    setFormData((prev) => ({...prev, type: value}));
-  }
+  // const handleTypeChange = (value) => {
+  //   setFormData((prev) => ({...prev, type: value}));
+  // }
   const handleCancel = () => {
     setFormData({
       title: "",
@@ -150,7 +151,7 @@ const TransactionForm = ({ open, onOpenChange, task }) => {
                   name="type"
                   id="type"
                   value={formData.type}
-                  onValueChange={handleStatusChange}
+                  onChange={handleChange}
                   className="h-11 rounded-xl border border-input bg-background px-3 text-sm"
                 >
                   <option value="expense">Expense</option>

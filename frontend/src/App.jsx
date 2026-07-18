@@ -11,6 +11,7 @@ import MainLayout from "./Layout/MainLayout";
 import DashboardPage from "./Dashboard/DashboardPage";
 import DashboardLayout from "./Components/DashboardLayout";
 import GuestRoute from "./Components/Auth/GuestRoute";
+import Transaction from "./Dashboard/Transaction";
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
         >
           <Route index element={<DashboardPage />} />
           <Route path="profile" element={<Profile />} />
+          <Route path="transactions" element={<Transaction />}/>
         </Route>
 
     
