@@ -13,7 +13,7 @@ function getGreeting() {
 }
 
 const DashboardPage = () => {
-  const [showCreateForm, setShowCreateForm] = useState();
+  const [showCreateForm, setShowCreateForm] = useState(false);
   const { user } = useAuthStore();
   // const initials = (user?.name ?? "U")
   //   .split(" ")
