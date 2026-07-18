@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Api } from "@/Lib/Api/ApiCient";
 const TransactionForm = ({ open, onOpenChange, task }) => {
   const [error, setError] = useState(null);
@@ -22,7 +22,7 @@ const TransactionForm = ({ open, onOpenChange, task }) => {
     category: task?.category ?? "",
     date: task?.date ? new Date(task.date).toISOString().split("T")[0] : "",
   });
-
+  const queryClient = useQueryClient();
   const createTransaction = useMutation({
     mutationFn: async (transactionData) => {
       const response = await Api.post("/transaction/create", transactionData);
@@ -78,13 +78,14 @@ const TransactionForm = ({ open, onOpenChange, task }) => {
     }
     console.log("form data", formData);
 
-    createTransaction.mutate({
+    const TransactionData = {
       title: formData.title,
       amount: formData.amount,
       type: formData.type,
       category: formData.category,
       date: formData.date,
-    });
+    }
+    createTransaction.mutate(TransactionData);
     setFormData({
       title: "",
       amount: "",
