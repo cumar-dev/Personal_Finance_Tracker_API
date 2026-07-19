@@ -10,7 +10,7 @@ import {
   ArrowUp,
   ArrowDown,
 } from "lucide-react";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/Components/ui/card";
 
 function StatCard({ icon: Icon, label, value, accentClass, bgClass }) {
   return (

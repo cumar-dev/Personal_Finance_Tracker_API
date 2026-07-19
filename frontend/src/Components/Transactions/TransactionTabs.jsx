@@ -1,5 +1,5 @@
 import React from "react";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/Components/ui/tabs";
 import { List, TrendingUp, TrendingDown, Loader2 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { Api } from "@/Lib/Api/ApiCient";

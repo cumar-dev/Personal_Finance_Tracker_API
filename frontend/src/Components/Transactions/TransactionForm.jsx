@@ -6,14 +6,15 @@ import {
   DialogTitle,
   DialogDescription,
   DialogFooter,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+} from "@/Components/ui/dialog";
+import { Button } from "@/Components/ui/button";
+import { Input } from "@/Components/ui/input";
+import { Label } from "@/Components/ui/label";
+import {Alert, AlertDescription} from "@/Components/ui/alert";
 import { toast } from "sonner";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Api } from "@/Lib/Api/ApiCient";
-import { Loader2 } from "lucide-react";
+import { AlertCircle, Loader2 } from "lucide-react";
 const TransactionForm = ({ open, onOpenChange, transaction }) => {
   const [error, setError] = useState(null);
 
@@ -170,6 +171,15 @@ const TransactionForm = ({ open, onOpenChange, transaction }) => {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md rounded-2xl p-0 overflow-hidden">
         <form onSubmit={handleSubmit}>
+          {error && (
+            <Alert className="border-destructive/50 bg-destructive/10">
+              <AlertCircle className="h-4 w-4 text-destructive" />
+              <AlertDescription className="text-destructive text-sm">
+                {error}
+              </AlertDescription>
+            </Alert>
+          )}
+
           <DialogHeader className="px-6 pt-6">
             <DialogTitle className="text-lg font-semibold">
               {transaction ? "Edit Transaction" : "Add Transaction"}

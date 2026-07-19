@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Card } from "../ui/card";
-import { Button } from "../ui/button";
+import { Card } from "@/Components/ui/card";
+import { Button } from "@/Components/ui/button";
 import {
   TrendingDown,
   TrendingUp,
@@ -15,7 +15,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@/Components/ui/dropdown-menu";
 import TransactionForm from "./TransactionForm";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Api } from "@/Lib/Api/ApiCient";
@@ -29,7 +29,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+} from "@/Components/ui/alert-dialog";
 const types = {
   income: {
     label: "Income",

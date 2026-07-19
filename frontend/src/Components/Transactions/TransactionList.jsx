@@ -2,7 +2,7 @@ import { Api } from "@/Lib/Api/ApiCient";
 import { useQuery } from "@tanstack/react-query";
 import { Loader2, Receipt, TrendingDown, TrendingUp } from "lucide-react";
 import React from "react";
-import { Card, CardContent } from "../ui/card";
+import { Card, CardContent } from "@/Components/ui/card";
 
 const TransactionList = () => {
   const {
