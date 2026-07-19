@@ -70,62 +70,74 @@ const RecentTransaction = () => {
   }
 
   return (
-    <div className="overflow-hidden rounded-2xl w-[90%] border border-border/60">
-      <Table>
-        <TableHeader>
-          <TableRow className="hover:bg-transparent">
-            <TableHead>Title</TableHead>
-            <TableHead>Category</TableHead>
-            <TableHead>Type</TableHead>
-            <TableHead>Date</TableHead>
-            <TableHead className="text-right">Amount</TableHead>
-          </TableRow>
-        </TableHeader>
-
-        <TableBody>
-          {recentTransaction.map((item) => {
-            const currentType = types[item.type];
-            const Icon = currentType.icon;
-
-            return (
-              <TableRow key={item._id}>
-                <TableCell className="font-medium text-foreground">
-                  {item.title}
-                </TableCell>
-
-                <TableCell>
-                  <span className="rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
-                    {item.category}
-                  </span>
-                </TableCell>
-
-                <TableCell>
-                  <span
-                    className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold ${currentType.bgClass} ${currentType.textClass}`}
-                  >
-                    <Icon className="h-3 w-3" />
-                    {currentType.label}
-                  </span>
-                </TableCell>
-
-                <TableCell className="text-sm text-muted-foreground">
-                  {new Date(item.date).toLocaleDateString("en-US", {
-                    month: "short",
-                    day: "numeric",
-                  })}
-                </TableCell>
-
-                <TableCell
-                  className={`text-right font-mono font-semibold tabular-nums ${currentType.textClass}`}
-                >
-                  ${Number(item.amount).toFixed(2)}
-                </TableCell>
+    <>
+      <div className="p-4">
+        <h2 className="text-lg font-semibold tracking-tight text-foreground">
+          Recent transaction
+        </h2>
+        <p className="text-sm text-muted-foreground">
+          Your latest activity across all accounts
+        </p>
+      </div>
+      <div className="p-5">
+        <div className="overflow-hidden rounded-2xl border border-border/60 p-4">
+          <Table>
+            <TableHeader>
+              <TableRow className="hover:bg-transparent">
+                <TableHead className="py-3.5">Title</TableHead>
+                <TableHead className="py-3.5">Category</TableHead>
+                <TableHead className="py-3.5">Type</TableHead>
+                <TableHead className="py-3.5">Date</TableHead>
+                <TableHead className="py-3.5 text-right">Amount</TableHead>
               </TableRow>
-            );
-          })}
-        </TableBody>
-      </Table>
-    </div>
+            </TableHeader>
+
+            <TableBody>
+              {recentTransaction.map((item) => {
+                const currentType = types[item.type];
+                const Icon = currentType.icon;
+
+                return (
+                  <TableRow key={item._id}>
+                    <TableCell className="py-3.5 font-medium text-foreground">
+                      {item.title}
+                    </TableCell>
+
+                    <TableCell className="py-3.5">
+                      <span className="rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
+                        {item.category}
+                      </span>
+                    </TableCell>
+
+                    <TableCell className="py-3.5">
+                      <span
+                        className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold ${currentType.bgClass} ${currentType.textClass}`}
+                      >
+                        <Icon className="h-3 w-3" />
+                        {currentType.label}
+                      </span>
+                    </TableCell>
+
+                    <TableCell className="py-3.5 text-sm text-muted-foreground">
+                      {new Date(item.date).toLocaleDateString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                      })}
+                    </TableCell>
+
+                    <TableCell
+                      className={`py-3.5 text-right font-mono font-semibold tabular-nums ${currentType.textClass}`}
+                    >
+                      ${Number(item.amount).toFixed(2)}
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </div>
+      </div>
+    </>
   );
 };
 
