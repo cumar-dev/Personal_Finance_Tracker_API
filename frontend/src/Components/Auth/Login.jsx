@@ -4,7 +4,7 @@ import {
   CardContent,
   CardHeader,
   CardFooter,
-} from "@/components/ui/card";
+} from "@/Components/ui/card";
 import { Input } from "@/Components/ui/input";
 import { Label } from "@/Components/ui/label";
 import { Button } from "@/Components/ui/button";

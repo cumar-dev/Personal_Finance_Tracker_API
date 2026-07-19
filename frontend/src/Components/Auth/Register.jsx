@@ -102,6 +102,13 @@ const Register = () => {
             </CardHeader>
 
             <CardContent className="pt-4">
+              {error && (
+                <div className="rounded-lg border border-destructive/30 bg-destructive/10 px-4 py-3 mb-4">
+                  <p className="text-sm font-medium text-destructive">
+                    {error}
+                  </p>
+                </div>
+              )}
               <form onSubmit={handleSubmit} className="space-y-4">
                 {/* Full Name */}
                 <div className="space-y-1.5">
