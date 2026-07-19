@@ -1,9 +1,7 @@
-
+import RecentTransaction from "@/Components/Transactions/recentTransaction";
 import TransactionList from "@/Components/Transactions/TransactionList";
 
-
 const DashboardPage = () => {
-  
   // const initials = (user?.name ?? "U")
   //   .split(" ")
   //   .filter(Boolean)
@@ -19,10 +17,14 @@ const DashboardPage = () => {
   // });
 
   return (
-    <div className="bg-muted/40">
-     <TransactionList />
-     <recentTransaction />
-    </div>
+    <>
+      <div className="bg-muted/40">
+        <div>
+          <TransactionList />
+        </div>
+        <RecentTransaction />
+      </div>
+    </>
   );
 };
 
