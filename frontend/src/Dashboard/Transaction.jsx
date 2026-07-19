@@ -1,5 +1,5 @@
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/Components/ui/card";
+import { Button } from "@/Components/ui/button";
 import { Plus } from "lucide-react";
 import { useAuthStore } from "@/Lib/Store/AuthStore";
 import { useState } from "react";

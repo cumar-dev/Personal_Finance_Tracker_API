@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { Button, buttonVariants } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { Button, buttonVariants } from "@/Components/ui/button";
+import { Badge } from "@/Components/ui/badge";
 import {
   Card,
   CardContent,
@@ -29,10 +29,7 @@ import {
   Star,
 } from "lucide-react";
 
-// ---------------------------------------------------------------------------
-// Brand marks — lucide-react 1.0 removed all brand/logo icons, so these are
-// small inline SVGs instead of a new dependency.
-// ---------------------------------------------------------------------------
+
 function XIcon(props) {
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
@@ -61,9 +58,7 @@ function LinkedinIcon(props) {
   );
 }
 
-// ---------------------------------------------------------------------------
-// Animated count-up number, respects prefers-reduced-motion
-// ---------------------------------------------------------------------------
+
 function useCountUp(target, { duration = 1400, decimals = 0 } = {}) {
   const [value, setValue] = useState(0);
   const startedRef = useRef(false);
@@ -86,7 +81,7 @@ function useCountUp(target, { duration = 1400, decimals = 0 } = {}) {
 
     const tick = (now) => {
       const progress = Math.min((now - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3); // ease-out-cubic
+      const eased = 1 - Math.pow(1 - progress, 3); 
       setValue(target * eased);
       if (progress < 1) raf = requestAnimationFrame(tick);
     };
@@ -101,9 +96,7 @@ function useCountUp(target, { duration = 1400, decimals = 0 } = {}) {
   });
 }
 
-// ---------------------------------------------------------------------------
-// Ledger strip — recurring structural device: timestamped dotted divider
-// ---------------------------------------------------------------------------
+
 function LedgerStrip({ label }) {
   return (
     <div className="flex items-center gap-3 text-[11px] font-mono uppercase tracking-widest text-muted-foreground/70">
@@ -114,9 +107,7 @@ function LedgerStrip({ label }) {
   );
 }
 
-// ---------------------------------------------------------------------------
-// Hero "live ledger" preview card
-// ---------------------------------------------------------------------------
+
 function LedgerCard() {
   const spent = useCountUp(1559.5, { decimals: 2 });
 
@@ -154,7 +145,7 @@ function LedgerCard() {
           </span>
         </div>
 
-        {/* mini sparkline */}
+       
         <svg
           viewBox="0 0 300 60"
           className="mt-3 w-full px-5"
@@ -171,7 +162,7 @@ function LedgerCard() {
 
         <div className="mx-5 mt-4 h-px bg-white/10" />
 
-        {/* transaction feed */}
+
         <div className="flex flex-col divide-y divide-white/10 px-2 py-2">
           {rows.map(({ icon: Icon, name, cat, amt }, i) => (
             <div
@@ -206,9 +197,7 @@ function LedgerCard() {
   );
 }
 
-// ---------------------------------------------------------------------------
-// Feature bento item
-// ---------------------------------------------------------------------------
+
 function FeatureCard({
   icon: Icon,
   title,
@@ -251,15 +240,11 @@ function FeatureCard({
   );
 }
 
-// ---------------------------------------------------------------------------
-// Page
-// ---------------------------------------------------------------------------
+
 const Home = ()=> {
   return (
     <div className="min-h-screen bg-background text-foreground">
-      {/* ---------------- Header ---------------- */}
-
-      {/* ---------------- Hero ---------------- */}
+     
       <section className="relative overflow-hidden">
         <div
           className="absolute inset-0 -z-10 opacity-[0.4]"
@@ -327,7 +312,7 @@ const Home = ()=> {
         </div>
       </section>
 
-      {/* ---------------- Stat strip (ledger device) ---------------- */}
+     
       <section className="border-y border-border/60 bg-muted/30 py-10">
         <div className="mx-auto max-w-6xl px-6">
           <LedgerStrip label="Since 2024" />
@@ -349,7 +334,7 @@ const Home = ()=> {
         </div>
       </section>
 
-      {/* ---------------- Features ---------------- */}
+      
       <section id="features" className="mx-auto max-w-6xl px-6 py-24">
         <div className="mx-auto max-w-xl text-center">
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
@@ -403,7 +388,7 @@ const Home = ()=> {
         </div>
       </section>
 
-      {/* ---------------- How it works ---------------- */}
+     
       <section id="how-it-works" className="bg-muted/30 py-24">
         <div className="mx-auto max-w-6xl px-6">
           <div className="mx-auto max-w-xl text-center">
@@ -444,7 +429,7 @@ const Home = ()=> {
         </div>
       </section>
 
-      {/* ---------------- Security ---------------- */}
+     
       <section id="security" className="mx-auto max-w-6xl px-6 py-24">
         <div className="grid items-center gap-12 md:grid-cols-2">
           <div>
@@ -507,7 +492,7 @@ const Home = ()=> {
         </div>
       </section>
 
-      {/* ---------------- Final CTA ---------------- */}
+     
       <section className="mx-auto max-w-6xl px-6 pb-24">
         <div className="relative overflow-hidden rounded-3xl bg-[oklch(0.22_0.06_255)] px-8 py-16 text-center sm:px-16">
           <div
@@ -535,10 +520,10 @@ const Home = ()=> {
         </div>
       </section>
 
-      {/* ---------------- Footer ---------------- */}
+    
       <footer className="border-t border-border/60 bg-muted/20">
         <div className="mx-auto max-w-6xl px-6 py-16">
-          {/* Brand row — logo/tagline bidix, social icons midig */}
+         
           <div className="flex flex-col items-start gap-6 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex flex-col gap-3">
               <Link to="/home" className="flex w-fit items-center gap-2">
