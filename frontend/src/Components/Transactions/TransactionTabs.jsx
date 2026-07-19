@@ -1,17 +1,12 @@
 import React from "react";
-import {
-  Tabs,
-  TabsList,
-  TabsTrigger,
-  TabsContent,
-} from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { List, TrendingUp, TrendingDown, Loader2 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { Api } from "@/Lib/Api/ApiCient";
 import { cn } from "@/Lib/utils";
 import TransactionCard from "./TransactionCard";
 
-const TransactionTabs = () => {
+const TransactionTabs = ({ searchQuery = "" }) => {
   const {
     data: Transactions = [],
     isLoading,
@@ -36,20 +31,26 @@ const TransactionTabs = () => {
   if (isError) {
     return (
       <div className="flex items-center justify-center py-16">
-        <p className="text-sm text-destructive">
-          Failed to load transactions.
-        </p>
+        <p className="text-sm text-destructive">Failed to load transactions.</p>
       </div>
     );
   }
 
-  const total = Transactions.length;
-  const incomeTransactions = Transactions.filter(
-    (t) => t.type === "income"
-  );
-  const expenseTransactions = Transactions.filter(
-    (t) => t.type === "expense"
-  );
+  const filteredSearchTransaction = searchQuery.trim()
+    ? Transactions.filter(
+        (transaction) =>
+          transaction.title
+            ?.toLowerCase()
+            .includes(searchQuery.toLowerCase()) ||
+          transaction.category
+            ?.toLowerCase()
+            .includes(searchQuery.toLowerCase()),
+      )
+    : Transactions;
+
+  const total = filteredSearchTransaction.length;
+  const incomeTransactions = filteredSearchTransaction.filter((t) => t.type === "income");
+  const expenseTransactions = filteredSearchTransaction.filter((t) => t.type === "expense");
 
   const countBadge =
     "ml-1 rounded-full bg-black/10 px-1.5 py-0.5 text-[11px] font-semibold";
@@ -78,7 +79,7 @@ const TransactionTabs = () => {
           value="all"
           className={cn(
             "gap-2 rounded-full px-4",
-            "data-[state=active]:bg-black data-[state=active]:text-white"
+            "data-[state=active]:bg-black data-[state=active]:text-white",
           )}
         >
           <List className="h-4 w-4" />
@@ -90,7 +91,7 @@ const TransactionTabs = () => {
           value="income"
           className={cn(
             "gap-2 rounded-full px-4",
-            "data-[state=active]:bg-green-600 data-[state=active]:text-white"
+            "data-[state=active]:bg-green-600 data-[state=active]:text-white",
           )}
         >
           <TrendingUp className="h-4 w-4" />
@@ -102,7 +103,7 @@ const TransactionTabs = () => {
           value="expense"
           className={cn(
             "gap-2 rounded-full px-4",
-            "data-[state=active]:bg-red-600 data-[state=active]:text-white"
+            "data-[state=active]:bg-red-600 data-[state=active]:text-white",
           )}
         >
           <TrendingDown className="h-4 w-4" />
@@ -112,11 +113,11 @@ const TransactionTabs = () => {
       </TabsList>
 
       <TabsContent value="all" className="mt-4">
-        {Transactions.length === 0 ? (
+        {filteredSearchTransaction.length === 0 ? (
           <EmptyState />
         ) : (
           <div className="grid p-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {Transactions.map((transaction) => (
+            {filteredSearchTransaction.map((transaction) => (
               <TransactionCard
                 key={transaction._id}
                 transaction={transaction}

@@ -5,7 +5,7 @@ import { useAuthStore } from "@/Lib/Store/AuthStore";
 import { useState } from "react";
 import TransactionForm from "@/Components/Transactions/TransactionForm";
 import TransactionTabs from "@/Components/Transactions/TransactionTabs";
-import ThemeToggle from "@/Components/ThemeToggle";
+import SearchTransaction from "@/Components/Transactions/SearchTransaction";
 
 function getGreeting() {
   const hour = new Date().getHours();
@@ -16,6 +16,7 @@ function getGreeting() {
 const Transaction = () => {
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [editingTransaction, setEditingTransaction] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
   const { user } = useAuthStore();
   const handleFormClose = () => {
     setShowCreateForm(false);
@@ -39,9 +40,8 @@ const Transaction = () => {
               <Plus className="h-3.5 w-3.5" />
               Add expense
             </Button>
-          {/* <ThemeToggle /> */}
+            {/* <ThemeToggle /> */}
           </div>
-
         </CardContent>
       </Card>
 
@@ -53,8 +53,8 @@ const Transaction = () => {
           Transaction={editingTransaction}
         />
       </div>
-
-      <TransactionTabs />
+      <SearchTransaction onSearch={setSearchTerm} />
+      <TransactionTabs searchQuery={searchTerm}/>
     </div>
   );
 };
