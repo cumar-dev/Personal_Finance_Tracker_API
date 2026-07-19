@@ -7,11 +7,14 @@ import {
   Wallet,
   HandCoins,
   Scale,
+  ArrowUp,
+  ArrowDown,
 } from "lucide-react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
 function StatCard({ icon: Icon, label, value, accentClass, bgClass }) {
   return (
+     <div className="p-3">
     <Card className="rounded-2xl border-border/60 shadow-sm">
       <CardContent className="p-5">
         <div className="flex items-center justify-between">
@@ -31,6 +34,7 @@ function StatCard({ icon: Icon, label, value, accentClass, bgClass }) {
         </p>
       </CardContent>
     </Card>
+    </div>
   );
 }
 
@@ -64,9 +68,113 @@ function CategoryBars({ items, color }) {
   );
 }
 
+// goodDirection: "up" (income — rising is good) or "down" (expense — falling is good)
+function ComparisonRow({ label, current, previous, color, goodDirection }) {
+  const max = Math.max(current, previous, 1);
+  const change =
+    previous === 0 ? (current > 0 ? 100 : 0) : ((current - previous) / previous) * 100;
+  const rose = change > 0;
+  const isGood = goodDirection === "up" ? rose : !rose;
+  const changeColor = isGood
+    ? "text-[oklch(0.5_0.15_150)]"
+    : "text-[oklch(0.5_0.18_25)]";
+
+  return (
+    <div>
+      <div className="mb-2 flex items-center justify-between">
+        <span className="text-sm font-medium text-foreground">{label}</span>
+        {change !== 0 && (
+          <span className={`flex items-center gap-0.5 font-mono text-xs font-semibold ${changeColor}`}>
+            {rose ? (
+              <ArrowUp className="h-3 w-3" />
+            ) : (
+              <ArrowDown className="h-3 w-3" />
+            )}
+            {Math.abs(change).toFixed(0)}%
+          </span>
+        )}
+      </div>
+
+      <div className="flex flex-col gap-1.5">
+        <div className="flex items-center gap-2">
+          <span className="w-16 shrink-0 text-[11px] text-muted-foreground">
+            Previous
+          </span>
+          <div className="h-2 flex-1 overflow-hidden rounded-full bg-muted">
+            <div
+              className="h-full rounded-full opacity-40"
+              style={{ width: `${(previous / max) * 100}%`, backgroundColor: color }}
+            />
+          </div>
+          <span className="w-16 shrink-0 text-right font-mono text-[11px] text-muted-foreground">
+            ${previous.toFixed(0)}
+          </span>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <span className="w-16 shrink-0 text-[11px] text-muted-foreground">
+            Current
+          </span>
+          <div className="h-2 flex-1 overflow-hidden rounded-full bg-muted">
+            <div
+              className="h-full rounded-full"
+              style={{ width: `${(current / max) * 100}%`, backgroundColor: color }}
+            />
+          </div>
+          <span className="w-16 shrink-0 text-right font-mono text-[11px] font-semibold text-foreground">
+            ${current.toFixed(0)}
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function PeriodComparisonCard({ title, description, current, previous }) {
+  return (
+     <div className="p-3">
+    <Card className="rounded-2xl border-border/60 shadow-sm">
+      <CardHeader className="p-5 pb-0">
+        <p className="text-sm font-semibold text-foreground">{title}</p>
+        {description && (
+          <p className="text-xs text-muted-foreground">{description}</p>
+        )}
+      </CardHeader>
+      <CardContent className="flex flex-col gap-5 p-5">
+        <ComparisonRow
+          label="Income"
+          current={current.income}
+          previous={previous.income}
+          color="oklch(0.55 0.15 150)"
+          goodDirection="up"
+        />
+        <ComparisonRow
+          label="Expense"
+          current={current.expense}
+          previous={previous.expense}
+          color="oklch(0.55 0.18 25)"
+          goodDirection="down"
+        />
+      </CardContent>
+    </Card>
+    </div>
+  );
+}
+
+const EMPTY_PERIOD = { current: { income: 0, expense: 0 }, previous: { income: 0, expense: 0 } };
+
 const GetMonthlySummary = () => {
   const {
-    data: monthlySummary = { income: [], expense: [] },
+    data: monthlySummary = {
+      income: [],
+      expense: [],
+      comparison: {
+        week: EMPTY_PERIOD,
+        month: EMPTY_PERIOD,
+        sixMonth: EMPTY_PERIOD,
+        year: EMPTY_PERIOD,
+      },
+    },
     isLoading,
     isError,
   } = useQuery({
@@ -96,7 +204,7 @@ const GetMonthlySummary = () => {
     );
   }
 
-  const { income = [], expense = [] } = monthlySummary;
+  const { income = [], expense = [], comparison } = monthlySummary;
   const isEmpty = income.length === 0 && expense.length === 0;
 
   if (isEmpty) {
@@ -118,7 +226,7 @@ const GetMonthlySummary = () => {
   return (
     <div className="flex flex-col gap-5">
       {/* Totals */}
-      <div className="grid gap-4 p-5 sm:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-3">
         <StatCard
           icon={Wallet}
           label="Total Income"
@@ -150,13 +258,53 @@ const GetMonthlySummary = () => {
         />
       </div>
 
+      {/* Period comparisons: Week / Month / 6 Months / Year */}
+      {comparison && (
+        <div className="grid gap-4 sm:grid-cols-2">
+          <PeriodComparisonCard
+            title="This week vs last week"
+            description="Last 7 days compared to the 7 days before"
+            current={comparison.week.current}
+            previous={comparison.week.previous}
+          />
+          <PeriodComparisonCard
+            title="This month vs last month"
+            description="Current calendar month compared to the previous one"
+            current={comparison.month.current}
+            previous={comparison.month.previous}
+          />
+          <PeriodComparisonCard
+            title="Last 6 months vs previous 6 months"
+            description="Recent half-year trend compared to the one before it"
+            current={comparison.sixMonth.current}
+            previous={comparison.sixMonth.previous}
+          />
+          <PeriodComparisonCard
+            title="This year vs last year"
+            description="Last 12 months compared to the 12 months before"
+            current={comparison.year.current}
+            previous={comparison.year.previous}
+          />
+        </div>
+      )}
+
       {/* Category breakdown */}
-      <div className="grid gap-4 sm:grid-cols-2 p-5">
+      <div className="grid gap-4 p-3 sm:grid-cols-2">
         <Card className="rounded-2xl border-border/60 shadow-sm">
-          <CardHeader className="p-5 pb-0">
-            <p className="text-sm font-semibold text-foreground">
-              Income by category
-            </p>
+          <CardHeader className="flex-row items-start justify-between gap-3 p-5 pb-0">
+            <div>
+              <p className="text-sm font-semibold text-foreground">
+                Income by category
+              </p>
+              <p className="text-xs text-muted-foreground">
+                Where this month's income came from
+              </p>
+            </div>
+            {income.length > 0 && (
+              <span className="shrink-0 rounded-full bg-[oklch(0.55_0.15_150)]/10 px-2.5 py-1 font-mono text-xs font-semibold text-[oklch(0.5_0.15_150)]">
+                ${income.reduce((sum, i) => sum + i.total, 0).toFixed(2)}
+              </span>
+            )}
           </CardHeader>
           <CardContent className="p-5">
             {income.length === 0 ? (
@@ -170,10 +318,20 @@ const GetMonthlySummary = () => {
         </Card>
 
         <Card className="rounded-2xl border-border/60 shadow-sm">
-          <CardHeader className="p-5 pb-0">
-            <p className="text-sm font-semibold text-foreground">
-              Expense by category
-            </p>
+          <CardHeader className="flex-row items-start justify-between gap-3 p-5 pb-0">
+            <div>
+              <p className="text-sm font-semibold text-foreground">
+                Expense by category
+              </p>
+              <p className="text-xs text-muted-foreground">
+                Where this month's spending went
+              </p>
+            </div>
+            {expense.length > 0 && (
+              <span className="shrink-0 rounded-full bg-[oklch(0.55_0.18_25)]/10 px-2.5 py-1 font-mono text-xs font-semibold text-[oklch(0.5_0.18_25)]">
+                ${expense.reduce((sum, i) => sum + i.total, 0).toFixed(2)}
+              </span>
+            )}
           </CardHeader>
           <CardContent className="p-5">
             {expense.length === 0 ? (

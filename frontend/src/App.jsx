@@ -12,6 +12,8 @@ import DashboardPage from "./Dashboard/DashboardPage";
 import DashboardLayout from "./Components/DashboardLayout";
 import GuestRoute from "./Components/Auth/GuestRoute";
 import Transaction from "./Dashboard/Transaction";
+import Report from "./Dashboard/Report";
+
 
 function App() {
   return (
@@ -38,6 +40,7 @@ function App() {
           <Route index element={<DashboardPage />} />
           <Route path="profile" element={<Profile />} />
           <Route path="transactions" element={<Transaction />}/>
+          <Route path="report" element={<Report />}/>
         </Route>
 
     

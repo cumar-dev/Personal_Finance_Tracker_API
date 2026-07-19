@@ -109,61 +109,109 @@ export const deleteTransaction = async (req, res, next) => {
   }
 };
 
+const getRangeTotals = async (userId, start, end) => {
+  const result = await Transactions.aggregate([
+    { $match: { userId, date: { $gte: start, $lt: end } } },
+    { $group: { _id: "$type", total: { $sum: "$amount" } } },
+  ]);
+  const totals = { income: 0, expense: 0 };
+  result.forEach((r) => {
+    totals[r._id] = r.total;
+  });
+  return totals;
+};
+
 export const getMonthlySummary = async (req, res, next) => {
   try {
-    const startOfMonth = new Date(
-      new Date().getFullYear(),
-      new Date().getMonth(),
-      1,
-    );
+    const userId = getAuthenticatedUserId(req.user);
+    const now = new Date();
 
-    const endOfMonth = new Date(
-      new Date().getFullYear(),
-      new Date().getMonth() + 1,
-      1,
+    // ---- Current month category breakdown (unchanged behavior) ----
+    const startOfThisMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    const startOfNextMonth = new Date(
+      now.getFullYear(),
+      now.getMonth() + 1,
+      1
+    );
+    const startOfLastMonth = new Date(
+      now.getFullYear(),
+      now.getMonth() - 1,
+      1
     );
 
     const summary = await Transactions.aggregate([
       {
         $match: {
-          userId: getAuthenticatedUserId(req.user),
-          date: {
-            $gte: startOfMonth,
-            $lt: endOfMonth,
-          },
+          userId,
+          date: { $gte: startOfThisMonth, $lt: startOfNextMonth },
         },
       },
       {
         $group: {
-          _id: {
-            category: "$category",
-            type: "$type",
-          },
-          total: {
-            $sum: "$amount",
-          },
+          _id: { category: "$category", type: "$type" },
+          total: { $sum: "$amount" },
         },
       },
     ]);
 
     const income = summary
       .filter((item) => item._id.type === "income")
-      .map((item) => ({
-        category: item._id.category,
-        total: item.total,
-      }));
+      .map((item) => ({ category: item._id.category, total: item.total }));
 
     const expense = summary
       .filter((item) => item._id.type === "expense")
-      .map((item) => ({
-        category: item._id.category,
-        total: item.total,
-      }));
+      .map((item) => ({ category: item._id.category, total: item.total }));
+
+    // ---- Date ranges for each comparison period ----
+
+    // Week: last 7 days vs the 7 days before that
+    const startOfThisWeek = new Date(now);
+    startOfThisWeek.setDate(now.getDate() - 6);
+    startOfThisWeek.setHours(0, 0, 0, 0);
+    const endOfToday = new Date(now);
+    endOfToday.setDate(now.getDate() + 1);
+    endOfToday.setHours(0, 0, 0, 0);
+    const startOfLastWeek = new Date(startOfThisWeek);
+    startOfLastWeek.setDate(startOfThisWeek.getDate() - 7);
+
+    // 6 months: last 6 months vs the 6 months before that
+    const startOfThis6Month = new Date(now.getFullYear(), now.getMonth() - 5, 1);
+    const startOfPrev6Month = new Date(now.getFullYear(), now.getMonth() - 11, 1);
+
+    // Year: last 12 months vs the 12 months before that
+    const startOfThisYear = new Date(now.getFullYear(), now.getMonth() - 11, 1);
+    const startOfPrevYear = new Date(now.getFullYear(), now.getMonth() - 23, 1);
+
+    const [
+      weekCurrent,
+      weekPrevious,
+      monthCurrent,
+      monthPrevious,
+      sixMonthCurrent,
+      sixMonthPrevious,
+      yearCurrent,
+      yearPrevious,
+    ] = await Promise.all([
+      getRangeTotals(userId, startOfThisWeek, endOfToday),
+      getRangeTotals(userId, startOfLastWeek, startOfThisWeek),
+      getRangeTotals(userId, startOfThisMonth, startOfNextMonth),
+      getRangeTotals(userId, startOfLastMonth, startOfThisMonth),
+      getRangeTotals(userId, startOfThis6Month, startOfNextMonth),
+      getRangeTotals(userId, startOfPrev6Month, startOfThis6Month),
+      getRangeTotals(userId, startOfThisYear, startOfNextMonth),
+      getRangeTotals(userId, startOfPrevYear, startOfThisYear),
+    ]);
 
     res.status(200).json({
       success: true,
       income,
       expense,
+      comparison: {
+        week: { current: weekCurrent, previous: weekPrevious },
+        month: { current: monthCurrent, previous: monthPrevious },
+        sixMonth: { current: sixMonthCurrent, previous: sixMonthPrevious },
+        year: { current: yearCurrent, previous: yearPrevious },
+      },
     });
   } catch (error) {
     next(error);
