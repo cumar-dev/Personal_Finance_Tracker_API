@@ -90,12 +90,12 @@
     --sidebar-border: oklch(0.922 0 0);
     --sidebar-ring: oklch(0.708 0 0);
 
-    /* Finance semantic colors */
-    --positive: oklch(0.6 0.15 145);       /* Forest Green */
+   
+    --positive: oklch(0.6 0.15 145);      
     --positive-foreground: oklch(0.985 0 0);
-    --negative: oklch(0.577 0.245 27.325); /* Brick Red (matches destructive) */
+    --negative: oklch(0.577 0.245 27.325); 
     --negative-foreground: oklch(0.985 0 0);
-    --warning: oklch(0.75 0.15 80);        /* Amber */
+    --warning: oklch(0.75 0.15 80);       
     --warning-foreground: oklch(0.145 0 0);
 }
 
@@ -132,12 +132,12 @@
     --sidebar-border: oklch(1 0 0 / 10%);
     --sidebar-ring: oklch(0.556 0 0);
 
-    /* Finance semantic colors */
-    --positive: oklch(0.7 0.17 145);       /* Emerald Green */
+   
+    --positive: oklch(0.7 0.17 145);      
     --positive-foreground: oklch(0.145 0 0);
-    --negative: oklch(0.704 0.191 22.216); /* Coral Red (matches destructive) */
+    --negative: oklch(0.704 0.191 22.216); 
     --negative-foreground: oklch(0.145 0 0);
-    --warning: oklch(0.8 0.15 80);         /* Golden Amber */
+    --warning: oklch(0.8 0.15 80);         
     --warning-foreground: oklch(0.145 0 0);
 }
 
