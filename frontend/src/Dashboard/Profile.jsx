@@ -124,6 +124,14 @@ const ProfilePage = ()=> {
 
   return (
     <div className="min-h-screen bg-muted/40 px-6 py-10">
+      <div className="p-4">
+        <h1 className="text-2xl font-bold tracking-tight text-foreground">
+         Profile Settings
+        </h1>
+        <p className="text-sm text-muted-foreground">
+         Manage your account settings and preferences.
+        </p>
+      </div>
       <div className="mx-auto flex max-w-3xl flex-col gap-6">
         {/* ---------------- Profile photo card ---------------- */}
         <div className="rounded-2xl border border-border bg-white p-6 shadow-sm">

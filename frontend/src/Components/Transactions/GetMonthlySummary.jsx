@@ -118,7 +118,7 @@ const GetMonthlySummary = () => {
   return (
     <div className="flex flex-col gap-5">
       {/* Totals */}
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid gap-4 p-5 sm:grid-cols-3">
         <StatCard
           icon={Wallet}
           label="Total Income"
@@ -151,7 +151,7 @@ const GetMonthlySummary = () => {
       </div>
 
       {/* Category breakdown */}
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid gap-4 sm:grid-cols-2 p-5">
         <Card className="rounded-2xl border-border/60 shadow-sm">
           <CardHeader className="p-5 pb-0">
             <p className="text-sm font-semibold text-foreground">
