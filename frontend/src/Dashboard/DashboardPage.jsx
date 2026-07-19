@@ -1,3 +1,4 @@
+import GetMonthlySummary from "@/Components/Transactions/GetMonthlySummary";
 import RecentTransaction from "@/Components/Transactions/recentTransaction";
 import TransactionList from "@/Components/Transactions/TransactionList";
 
@@ -23,6 +24,7 @@ const DashboardPage = () => {
           <TransactionList />
         </div>
         <RecentTransaction />
+        <GetMonthlySummary />
       </div>
     </>
   );

@@ -5,6 +5,7 @@ import { useAuthStore } from "@/Lib/Store/AuthStore";
 import { useState } from "react";
 import TransactionForm from "@/Components/Transactions/TransactionForm";
 import TransactionTabs from "@/Components/Transactions/TransactionTabs";
+import ThemeToggle from "@/Components/ThemeToggle";
 
 function getGreeting() {
   const hour = new Date().getHours();
@@ -30,25 +31,29 @@ const Transaction = () => {
             </h1>
           </div>
 
-          <Button
-            onClick={() => setShowCreateForm(true)}
-            className="gap-1.5 rounded-full bg-foreground px-5 text-background hover:bg-foreground/90"
-          >
-            <Plus className="h-3.5 w-3.5" />
-            Add expense
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button
+              onClick={() => setShowCreateForm(true)}
+              className="gap-1.5 rounded-full bg-foreground px-5 text-background hover:bg-foreground/90"
+            >
+              <Plus className="h-3.5 w-3.5" />
+              Add expense
+            </Button>
+          {/* <ThemeToggle /> */}
+          </div>
+
         </CardContent>
       </Card>
 
       {/* calling differnt pages in here */}
       <div className="pb-5">
         <TransactionForm
-        open={showCreateForm || !!editingTransaction}
-        onOpenChange={handleFormClose}
-        Transaction={editingTransaction}
-      />
+          open={showCreateForm || !!editingTransaction}
+          onOpenChange={handleFormClose}
+          Transaction={editingTransaction}
+        />
       </div>
-     
+
       <TransactionTabs />
     </div>
   );
