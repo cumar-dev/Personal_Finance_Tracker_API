@@ -10,25 +10,33 @@ import { Logger } from "./Middlewares/Logger.js";
 import { errorHandler } from "./Middlewares/errorHandler.js";
 import authRout from "./Router/Auth.js";
 import adminRout from "./Router/Admin.js";
-import uploadRout from "./Router/Upload.js"
-import transactionRout from "./Router/Transaction.js"
+import uploadRout from "./Router/Upload.js";
+import transactionRout from "./Router/Transaction.js";
 import { swaggerSpec } from "./Utils/Swagger.js";
 import { limiter } from "./Middlewares/rateLimiter.js";
 import cloudinary from "./Utils/Cloudinary.js";
+import path from "path";
+import { fileURLToPath } from "url";
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 app.use(express.json());
-app.use(cors({
-  origin: [process.env.FRONTEND_URL, process.env.LOCAL_HOST],
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: [process.env.FRONTEND_URL, process.env.LOCAL_HOST],
+    credentials: true,
+  }),
+);
 app.use(helmet());
 app.use(limiter);
 app.use(Logger);
-app.use('/api/Personal_Finance_Tracker_API-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-if (process.env.NODE_ENV === 'development') {
-  app.use(morgan('dev'));
+app.use(
+  "/api/Personal_Finance_Tracker_API-docs",
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerSpec),
+);
+if (process.env.NODE_ENV === "development") {
+  app.use(morgan("dev"));
 }
 app.get("/", (req, res) => {
   res.send("Server is running");
@@ -46,10 +54,25 @@ app.use("/cloudinary-test", async (req, res) => {
     res.status(500).json(err);
   }
 });
+
+if (process.env.NODE_ENV === "production") {
+  const _dirname = path.dirname(fileURLToPath(import.meta.url));
+  app.use(express.static(path.join(_dirname, "../Frontend/dist")));
+
+  // serve the frontend app
+
+  app.get(/.*/, (req, res) => {
+    res.send(path.join(_dirname, "..", "Frontend", "dist", "index.html"));
+  });
+}
 app.use(errorHandler);
 
 mongoose
-  .connect(process.env.NODE_ENV == "development" ? process.env.MONGO_URL_DEV : process.env.MONGO_URL_PRO)
+  .connect(
+    process.env.NODE_ENV == "development"
+      ? process.env.MONGO_URL_DEV
+      : process.env.MONGO_URL_PRO,
+  )
   .then(() => {
     console.log("✅ MongoDB connected");
     app.listen(PORT, () => {
