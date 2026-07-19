@@ -20,10 +20,8 @@ const DashboardPage = () => {
 
   return (
     <div className="bg-muted/40">
-     
-      
-     
-      <TransactionList />
+     <TransactionList />
+     <recentTransaction />
     </div>
   );
 };
