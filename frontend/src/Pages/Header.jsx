@@ -9,7 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/Components/ui/dropdown-menu";
-import { useAuthStore } from "@/lib/Store/AuthStore";
+import { useAuthStore } from "@/Lib/Store/AuthStore";
 import { ChevronDown, User, LogOut, LayoutDashboard } from "lucide-react";
 import { cn } from "../Lib/utils";
 import ThemeToggle from "@/Components/ThemeToggle";
