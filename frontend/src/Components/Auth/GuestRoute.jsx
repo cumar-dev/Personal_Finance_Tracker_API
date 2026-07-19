@@ -1,5 +1,5 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { useAuthStore } from "@/Lib/store/AuthStore";
+import { useAuthStore } from "@/Lib/Store/AuthStore";
 
 const GuestRoute = () => {
   const { token } = useAuthStore();
