@@ -73,7 +73,7 @@ const TransactionTabs = () => {
 
   return (
     <Tabs defaultValue="all" className="w-full">
-      <TabsList className="h-12 w-[97%] ml-4 gap-1 rounded-full border bg-white p-1.5 shadow-sm">
+      <TabsList className="h-12 w-[97%] ml-4 gap-1 rounded-full border bg-background p-1.5 shadow-sm">
         <TabsTrigger
           value="all"
           className={cn(

@@ -134,7 +134,7 @@ const ProfilePage = ()=> {
       </div>
       <div className="mx-auto flex max-w-3xl flex-col gap-6">
         {/* ---------------- Profile photo card ---------------- */}
-        <div className="rounded-2xl border border-border bg-white p-6 shadow-sm">
+        <div className="rounded-2xl border border-border bg-background p-6 shadow-sm">
           <div className="flex flex-wrap items-center gap-6">
             <div className="relative shrink-0">
               <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border border-border bg-muted">
@@ -218,7 +218,7 @@ const ProfilePage = ()=> {
         </div>
 
         {/* ---------------- Account details card ---------------- */}
-        <div className="rounded-2xl border border-border bg-white p-6 shadow-sm">
+        <div className="rounded-2xl border border-border bg-background p-6 shadow-sm">
           <h2 className="mb-5 text-base font-semibold text-foreground">
             Account details
           </h2>

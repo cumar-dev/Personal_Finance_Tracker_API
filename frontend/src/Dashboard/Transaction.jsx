@@ -23,7 +23,7 @@ const Transaction = () => {
   };
   return (
     <div className="bg-muted/40">
-      <Card className="bg-white shadow-sm">
+      <Card className="bg-background shadow-sm">
         <CardContent className="flex flex-col gap-6 p-6 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h1 className="text-xl font-semibold tracking-tight text-foreground">
