@@ -288,7 +288,7 @@ const GetMonthlySummary = () => {
         </div>
       )}
 
-      {/* Category breakdown */}
+     
       <div className="grid gap-4 p-3 sm:grid-cols-2">
         <Card className="rounded-2xl border-border/60 shadow-sm">
           <CardHeader className="flex-row items-start justify-between gap-3 p-5 pb-0">
