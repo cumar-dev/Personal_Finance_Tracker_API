@@ -34,7 +34,7 @@ app.use(
         defaultSrc: ["'self'"],
         connectSrc: [
           "'self'",
-          "https://personal-finance-tracker-apiatshow.onrender.com",
+          "https://personal-finance-tracker-apiatfintrack.onrender.com",
         ],
       },
     },
