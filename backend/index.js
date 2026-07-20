@@ -56,13 +56,12 @@ app.use("/cloudinary-test", async (req, res) => {
 });
 
 if (process.env.NODE_ENV === "production") {
-  const _dirname = path.dirname(fileURLToPath(import.meta.url));
-  app.use(express.static(path.join(_dirname, "../frontend/dist")));
+  const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-  // serve the frontend app
+  app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
   app.get(/.*/, (req, res) => {
-    res.send(path.join(_dirname, "..", "frontend", "dist", "index.html"));
+    res.sendFile(path.join(__dirname, "../frontend/dist/index.html"));
   });
 }
 app.use(errorHandler);
