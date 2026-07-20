@@ -36,7 +36,7 @@ app.use(
           "'self'",
           "https://personal-finance-tracker-apiatfintrack.onrender.com",
         ],
-          imgSrc: ["'self'", "data:", "blob:"],
+          imgSrc: ["'self'", "data:", "blob:", "https://res.cloudinary.com"],
       },
     },
   })
