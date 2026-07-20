@@ -38,9 +38,9 @@ app.use(
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
-// app.get("/", (req, res) => {
-//   res.send("Server is running");
-// });
+app.get("/health", (req, res) => {
+  res.send("Server is running");
+});
 app.use("/api/auth", authRout);
 app.use("/api/admin", adminRout);
 app.use("/api/upload", uploadRout);
