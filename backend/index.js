@@ -27,7 +27,19 @@ app.use(
     credentials: true,
   }),
 );
-app.use(helmet());
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        connectSrc: [
+          "'self'",
+          "https://personal-finance-tracker-apiatshow.onrender.com",
+        ],
+      },
+    },
+  })
+);
 app.use(limiter);
 app.use(Logger);
 app.use(
