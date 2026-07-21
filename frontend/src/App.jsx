@@ -20,6 +20,7 @@ function App() {
     <>
       <Routes>
           <Route path="/" element={<Navigate to="/home" replace />} />
+          
         <Route element={<GuestRoute />}>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />

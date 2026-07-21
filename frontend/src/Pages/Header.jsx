@@ -148,7 +148,7 @@ const Header = () => {
                 </DropdownMenuItem>
 
                 <DropdownMenuItem className="gap-2.5 rounded-lg px-2.5 py-2 text-sm cursor-pointer focus:bg-muted">
-                  <Link to="/profile" className="flex items-center gap-2.5">
+                  <Link to="/dashboard/profile" className="flex items-center gap-2.5">
                     <User className="h-4 w-4 text-muted-foreground" />
                     Profile
                   </Link>

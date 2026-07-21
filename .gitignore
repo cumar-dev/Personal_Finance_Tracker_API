@@ -6,6 +6,8 @@ node_modules/
 .env.development
 .env.production
 
+Images
+
 # Build/output folders (optional)
 dist/
 build/
